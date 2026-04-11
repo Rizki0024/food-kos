@@ -14,38 +14,34 @@
         .hidden { display: none !important; }
         .btn-hover:active { transform: scale(0.95); }
         .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
-        .floating { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
 
-    <section id="page-home" class="min-h-screen">
+    <section id="page-home">
         <div class="bg-gradient-fkf pt-16 pb-24 px-6 text-center text-white relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full -translate-x-10 -translate-y-10"></div>
             <div class="relative z-10">
                 <span class="bg-white/20 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block">Fantastic Kos Food</span>
                 <h1 class="text-4xl font-extrabold mb-2 leading-tight">Solusi Lapar<br>Anak FKIP</h1>
                 <p class="text-sm opacity-90 mb-8 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
                 
                 <div class="flex gap-2 justify-center mb-10 text-[10px] font-bold">
-                    <span class="bg-red-500 px-3 py-2 rounded-xl shadow-lg">🔥 Sisa 18 Porsi</span>
+                    <span class="bg-red-500 px-3 py-2 rounded-xl shadow-lg">🔥 Sisa <span id="display-stok">--</span> Porsi</span>
                     <span class="bg-orange-700 px-3 py-2 rounded-xl shadow-lg">⏳ PO Tutup 20.00</span>
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 w-full max-w-xs mx-auto">
-                    <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-2xl active-scale btn-hover">Order Sekarang (Ready)</button>
+                    <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-2xl btn-hover">Order Sekarang (Ready)</button>
                     <button onclick="startOrder('Pre-Order')" class="bg-black/20 text-white font-bold py-5 rounded-custom border border-white/40 btn-hover">Pre-Order Besok ⏳</button>
                 </div>
             </div>
-            <div class="mt-10 text-6xl floating">🍱</div>
         </div>
 
         <div class="px-6 -mt-10 mb-10">
             <div class="glass p-6 rounded-custom shadow-xl flex justify-around text-center border-t-4 border-orange-500">
-                <div><p class="text-xl font-bold text-orange-600">32</p><p class="text-[10px] text-gray-400">ORDER HARI INI</p></div>
-                <div class="border-x px-4"><p class="text-xl font-bold text-orange-600">FKIP</p><p class="text-[10px] text-gray-400">FAVORIT KAMPUS</p></div>
-                <div><p class="text-xl font-bold text-orange-600">12:00</p><p class="text-[10px] text-gray-400">JAM RAMAI</p></div>
+                <div><p class="text-xl font-bold text-orange-600" id="display-order">0</p><p class="text-[10px] text-gray-400 uppercase">Order Hari Ini</p></div>
+                <div class="border-x px-4"><p class="text-xl font-bold text-orange-600">FKIP</p><p class="text-[10px] text-gray-400 uppercase">Favorit Kampus</p></div>
+                <div><p class="text-xl font-bold text-orange-600">12:00</p><p class="text-[10px] text-gray-400 uppercase">Jam Ramai</p></div>
             </div>
         </div>
 
@@ -58,36 +54,36 @@
                 </ul>
             </div>
         </div>
-
-        <div class="px-6 mb-16">
-            <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-6 rounded-custom text-white shadow-lg flex items-center justify-between">
-                <div>
-                    <h2 class="text-lg font-bold mb-1">🎓 Diskon Mahasiswa</h2>
-                    <p class="text-[10px] opacity-90">Kirim foto KTM & dapet diskon 1k-2k!</p>
-                </div>
-                <span class="text-4xl">💳</span>
-            </div>
-        </div>
-        
-        <footer class="text-center py-10 text-gray-300 text-[10px]">© 2026 Fantastic Kos Food</footer>
     </section>
 
-    <section id="page-menu" class="hidden py-8 px-6 min-h-screen bg-[#FFF8E1]">
+    <section id="page-menu" class="hidden py-8 px-6 min-h-screen bg-[#FFF8E1] pb-32">
         <button onclick="showSection('page-home')" class="mb-4 text-orange-600 font-bold">← Kembali</button>
         <div id="header-menu" class="p-6 rounded-2xl mb-8 text-white shadow-lg">
             <h2 id="menu-title" class="text-2xl font-extrabold"></h2>
             <p id="menu-desc" class="text-xs opacity-90"></p>
         </div>
 
-        <div class="space-y-4 max-w-md mx-auto" id="menu-list">
+        <div class="space-y-4 max-w-md mx-auto" id="menu-list"></div>
+
+        <div id="cart-bar" class="fixed bottom-6 left-6 right-6 glass p-4 rounded-custom shadow-2xl border border-orange-200 hidden">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase">Total Pesanan</p>
+                    <p id="cart-total-price" class="text-xl font-extrabold text-orange-600">Rp0</p>
+                </div>
+                <button onclick="goToPayment()" class="bg-orange-500 text-white px-8 py-3 rounded-2xl font-extrabold shadow-lg btn-hover">Lanjut</button>
             </div>
+        </div>
     </section>
 
-    <section id="page-payment-type" class="hidden py-10 px-6 min-h-screen bg-gray-50 text-center">
-        <h2 class="text-2xl font-extrabold mb-8">Pilih Pembayaran</h2>
+    <section id="page-payment-type" class="hidden py-10 px-6 min-h-screen bg-gray-50">
+        <button onclick="showSection('page-menu')" class="mb-6 text-orange-600 font-bold">← Ganti Menu</button>
+        <h2 class="text-2xl font-extrabold mb-4 text-center">Metode Pembayaran</h2>
+        <div id="order-summary-box" class="bg-white p-4 rounded-2xl mb-8 shadow-sm border border-gray-100 text-sm"></div>
+
         <div class="grid gap-4 max-w-xs mx-auto">
             <button onclick="finalOrder('COD')" class="p-6 bg-white rounded-custom shadow-sm border-b-4 border-gray-200 btn-hover">
-                <p class="text-3xl mb-2">💸</p><p class="font-bold">COD (Bayar di Kos)</p>
+                <p class="text-3xl mb-2">💸</p><p class="font-bold text-gray-700">COD (Bayar di Kos)</p>
             </button>
             <button onclick="showSection('page-transfer-list')" class="p-6 bg-orange-500 text-white rounded-custom shadow-lg border-b-4 border-orange-700 btn-hover">
                 <p class="text-3xl mb-2">💳</p><p class="font-bold">Transfer / E-Wallet</p>
@@ -95,16 +91,14 @@
         </div>
     </section>
 
-    <section id="page-transfer-list" class="hidden py-8 px-6 min-h-screen">
+    <section id="page-transfer-list" class="hidden py-8 px-6 min-h-screen bg-white">
         <button onclick="showSection('page-payment-type')" class="mb-6 text-orange-600 font-bold">← Kembali</button>
         <h2 class="text-2xl font-extrabold mb-6">Pilih E-Wallet / Bank</h2>
         <div class="grid grid-cols-2 gap-4">
             <button onclick="showTransferDetail('QRIS', 'Scan Semua Aplikasi')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-orange-600 btn-hover">🖼️ QRIS</button>
             <button onclick="showTransferDetail('DANA', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-blue-500 btn-hover">🔵 DANA</button>
             <button onclick="showTransferDetail('OVO', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-purple-600 btn-hover">🟣 OVO</button>
-            <button onclick="showTransferDetail('GoPay', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-green-500 btn-hover">🟢 GoPay</button>
             <button onclick="showTransferDetail('SeaBank', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-orange-400 btn-hover">🟠 SeaBank</button>
-            <button onclick="showTransferDetail('BNI', '1234567890')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-orange-800 btn-hover">🏦 BNI</button>
         </div>
     </section>
 
@@ -112,24 +106,35 @@
         <h2 class="text-2xl font-extrabold mb-10" id="final-bank-name"></h2>
         <div class="bg-orange-50 p-8 rounded-custom mb-10 border-2 border-dashed border-orange-200">
             <p id="final-target" class="text-2xl font-mono font-bold text-orange-600"></p>
-            <div id="qris-area" class="hidden mt-4 bg-gray-300 aspect-square rounded-xl flex items-center justify-center text-xs font-bold text-gray-500">[FOTO QRIS]</div>
         </div>
         <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl btn-hover">Kirim Bukti Bayar ke WA</button>
     </section>
 
     <script>
-        let orderType = "";
-        let selectedFood = "";
-        let selectedPrice = "";
-        let selectedProvider = "";
+        /* ============================================================
+           BAGIAN SETTING MANUAL (UBAH DATA DI SINI BUD!)
+           ============================================================ */
+        const DATA_REALTIME = {
+            sisaStok: 50,       // Ubah angka ini untuk update stok porsi
+            orderHariIni: 0    // Ubah angka ini untuk update jumlah pembeli
+        };
 
         const menuData = [
-            { name: "Lumpia Kering Balado", price: "5k", icon: "🌯", badge: "🔥 Paling Laris" },
-            { name: "Tahu Bakso", price: "10k", icon: "🍱", badge: "⭐ Favorit FKIP" },
-            { name: "Cilok Pedas", price: "5k", icon: "🍡", badge: "" },
-            { name: "Lumpia Kering Asin", price: "5k", icon: "🌯", badge: "" },
-            { name: "Bolu Coklat Lumer", price: "10k", icon: "🍰", badge: "✨ Premium" }
+            { id: 1, name: "Lumpia Kering Balado", price: 5000, icon: "🌯", badge: "🔥 Paling Laris" },
+            { id: 2, name: "Tahu Bakso", price: 10000, icon: "🍱", badge: "⭐ Favorit FKIP" },
+            { id: 3, name: "Cilok Pedas", price: 5000, icon: "🍡", badge: "" },
+            { id: 4, name: "Lumpia Kering Asin", price: 5000, icon: "🌯", badge: "" },
+            { id: 5, name: "Bolu Coklat Lumer", price: 10000, icon: "🍰", badge: "✨ Premium" }
         ];
+        /* ============================================================ */
+
+        let cart = {};
+        let orderType = "";
+        let selectedProvider = "";
+
+        // Tampilkan data manual ke website
+        document.getElementById('display-stok').innerText = DATA_REALTIME.sisaStok;
+        document.getElementById('display-order').innerText = DATA_REALTIME.orderHariIni;
 
         function showSection(id) {
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
@@ -139,57 +144,124 @@
 
         function startOrder(type) {
             orderType = type;
-            const header = document.getElementById('header-menu');
-            const title = document.getElementById('menu-title');
-            const desc = document.getElementById('menu-desc');
+            renderMenu();
+            showSection('page-menu');
+        }
+
+        function renderMenu() {
             const list = document.getElementById('menu-list');
+            const header = document.getElementById('header-menu');
+            
+            header.className = (orderType === 'Pre-Order') ? "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-po" : "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-fkf";
+            document.getElementById('menu-title').innerText = (orderType === 'Pre-Order') ? "Pre-Order Besok ⏳" : "Ready Hari Ini 🔥";
+            document.getElementById('menu-desc').innerText = "Silakan tambah menu yang kamu mau:";
 
-            header.className = (type === 'Pre-Order') ? "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-po" : "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-fkf";
-            title.innerText = (type === 'Pre-Order') ? "Pre-Order Besok ⏳" : "Ready Hari Ini 🔥";
-            desc.innerText = (type === 'Pre-Order') ? "Dikirim besok sesuai jadwal FKF." : "Pesan sekarang, langsung antar!";
-
-            // Render Menu Items
             list.innerHTML = menuData.map(item => `
-                <div onclick="selectMenu('${item.name}', '${item.price}')" class="bg-white p-4 rounded-custom shadow-md flex justify-between items-center active-scale btn-hover border border-gray-50">
+                <div class="bg-white p-4 rounded-custom shadow-md flex justify-between items-center border border-gray-50">
                     <div class="flex items-center gap-3">
                         <span class="text-3xl">${item.icon}</span>
                         <div>
                             ${item.badge ? `<span class="text-[8px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase">${item.badge}</span>` : ''}
                             <h3 class="font-bold text-sm">${item.name}</h3>
-                            <p class="text-orange-600 font-bold">${item.price}</p>
+                            <p class="text-orange-600 font-bold">${(item.price/1000)}k</p>
                         </div>
                     </div>
-                    <span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-bold">PILIH</span>
+                    <div class="flex items-center gap-3 bg-gray-100 rounded-xl p-1">
+                        <button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-white rounded-lg font-bold shadow-sm">-</button>
+                        <span class="font-bold min-w-[20px] text-center" id="qty-${item.id}">${cart[item.id] || 0}</span>
+                        <button onclick="updateCart(${item.id}, 1)" class="w-8 h-8 bg-orange-500 text-white rounded-lg font-bold shadow-sm">+</button>
+                    </div>
                 </div>
             `).join('');
-
-            showSection('page-menu');
+            updateCartUI();
         }
 
-        function selectMenu(name, price) {
-            selectedFood = name;
-            selectedPrice = price;
+        function updateCart(id, change) {
+            cart[id] = (cart[id] || 0) + change;
+            if (cart[id] <= 0) delete cart[id];
+            
+            // Update angka quantity di layar tanpa render ulang seluruh menu
+            const qtySpan = document.getElementById(`qty-${id}`);
+            if(qtySpan) qtySpan.innerText = cart[id] || 0;
+            
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let total = 0;
+            let totalItems = 0;
+            for (let id in cart) {
+                const item = menuData.find(m => m.id == id);
+                total += item.price * cart[id];
+                totalItems += cart[id];
+            }
+            
+            const cartBar = document.getElementById('cart-bar');
+            if (totalItems > 0) {
+                cartBar.classList.remove('hidden');
+                document.getElementById('cart-total-price').innerText = "Rp" + total.toLocaleString('id-ID');
+            } else {
+                cartBar.classList.add('hidden');
+            }
+        }
+
+        function goToPayment() {
+            let summaryHTML = `<p class="font-bold mb-2 border-b pb-2">Ringkasan Pesanan:</p>`;
+            let total = 0;
+            for (let id in cart) {
+                const item = menuData.find(m => m.id == id);
+                summaryHTML += `<div class="flex justify-between mb-1">
+                    <span>${item.name} x${cart[id]}</span>
+                    <span>Rp${(item.price * cart[id]).toLocaleString('id-ID')}</span>
+                </div>`;
+                total += item.price * cart[id];
+            }
+            summaryHTML += `<div class="flex justify-between mt-2 pt-2 border-t font-extrabold text-orange-600">
+                <span>TOTAL</span>
+                <span>Rp${total.toLocaleString('id-ID')}</span>
+            </div>`;
+            
+            document.getElementById('order-summary-box').innerHTML = summaryHTML;
             showSection('page-payment-type');
+        }
+
+        function getCartText() {
+            let text = "";
+            let total = 0;
+            for (let id in cart) {
+                const item = menuData.find(m => m.id == id);
+                text += `• ${item.name} (x${cart[id]})\n`;
+                total += item.price * cart[id];
+            }
+            return { text, total };
+        }
+
+        function finalOrder(method) {
+            const { text, total } = getCartText();
+            const noWA = "6283144628727";
+            let msg = `Halo FKF! Saya mau order *${orderType}*\n\n` +
+                      `🛒 *PESANAN:*\n${text}\n` +
+                      `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
+                      `💳 *METODE:* ${method}\n\n` +
+                      `Nama:\nAlamat:`;
+            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function showTransferDetail(provider, target) {
             selectedProvider = provider;
             document.getElementById('final-bank-name').innerText = "Bayar via " + provider;
             document.getElementById('final-target').innerText = target;
-            const qris = document.getElementById('qris-area');
-            (provider === 'QRIS') ? qris.classList.remove('hidden') : qris.classList.add('hidden');
             showSection('page-transfer-final');
         }
 
-        function finalOrder(method) {
-            const noWA = "6283144628727";
-            let msg = `Halo FKF! Saya mau pesan *${selectedFood}*\nJenis: ${orderType}\nMetode: ${method}\n\nNama:\nAlamat:`;
-            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
         function sendToWhatsAppWithPayment() {
+            const { text, total } = getCartText();
             const noWA = "6283144628727";
-            let msg = `Halo FKF! Saya sudah transfer via *${selectedProvider}*\n\n📌 *PESANAN*\n• Menu: ${selectedFood}\n• Jenis: ${orderType}\n\n*(Bukti transfer kirim setelah ini)*`;
+            let msg = `Halo FKF! Saya sudah transfer via *${selectedProvider}*\n\n` +
+                      `🛒 *DETAIL PESANAN:*\n${text}\n` +
+                      `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
+                      `📌 *JENIS:* ${orderType}\n\n` +
+                      `*(Bukti transfer kirim setelah ini)*`;
             window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
