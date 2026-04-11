@@ -1,360 +1,232 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FKF - Solusi Lapar Anak FKIP</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-            background-color: #FFF9F2;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FKF - Solusi Lapar Anak FKIP</title>
 
-        /* 1. BACKGROUND DOODLE MAKANAN & GRADIENT SOFT */
-        .bg-hero-doodle {
-            background-color: #FFF8E1;
-            background-image: 
-                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23D7A86E' stroke-width='1.5' fill='none' opacity='0.2'%3E%3C!-- Cupcake --%3E%3Cpath d='M 20 30 Q 25 20 30 30 L 32 40 L 18 40 Z' /%3E%3Cpath d='M 18 40 L 32 40 L 29 50 L 21 50 Z' /%3E%3Ccircle cx='25' cy='22' r='2' /%3E%3C!-- Croissant --%3E%3Cpath d='M 70 70 C 60 60 80 50 90 70 C 80 80 60 80 70 70 Z' /%3E%3C!-- Candy --%3E%3Ccircle cx='75' cy='25' r='5' /%3E%3Cpath d='M 70 25 L 65 20 L 65 30 Z' /%3E%3Cpath d='M 80 25 L 85 20 L 85 30 Z' /%3E%3C!-- Donut --%3E%3Ccircle cx='25' cy='80' r='8' /%3E%3Ccircle cx='25' cy='80' r='3' /%3E%3C/g%3E%3C/svg%3E"),
-                linear-gradient(135deg, rgba(255,248,225,0.95) 0%, rgba(255,213,79,0.85) 50%, rgba(215,168,110,0.8) 100%);
-        }
-        
-        /* 2. EFEK GLOW HALUS DI BACKGROUND */
-        .glow-bg { box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.7); }
-        
-        .bg-gradient-fkf { background: linear-gradient(135deg, #FF7A00 0%, #FFD54F 100%); }
-        .bg-gradient-po { background: linear-gradient(135deg, #4433ff 0%, #00d2ff 100%); }
-        .rounded-custom { border-radius: 24px; }
-        .hidden { display: none !important; }
-        .btn-hover:active { transform: scale(0.95); }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); }
-        .text-chocolate { color: #5D4037; }
-    </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background-color: #FFF9F2;
+    color: #333;
+}
+
+.bg-hero-doodle {
+    background-color: #FFF8E1;
+    /* Memperbaiki SVG yang terpotong menjadi pola polka dot halus */
+    background-image: 
+        url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='2' fill='%23f59e0b' fill-opacity='0.15'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, rgba(255,248,225,0.95), rgba(255,213,79,0.85), rgba(215,168,110,0.8));
+}
+
+.rounded-custom { border-radius: 24px; }
+.hidden { display: none !important; }
+.btn-hover:active { transform: scale(0.95); transition: transform 0.1s; }
+.text-chocolate { color: #5D4037; }
+</style>
 </head>
-<body class="text-gray-800 antialiased">
 
-    <section id="page-home" class="pb-10">
-        
-        <div class="bg-hero-doodle pt-16 pb-24 px-6 text-center text-chocolate relative overflow-hidden shadow-lg glow-bg rounded-b-[40px]">
-            <div class="relative z-10">
-                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate">Fantastic Kos Food</span>
-                <h1 class="text-4xl font-extrabold mb-2 leading-tight">Solusi Lapar<br>Anak FKIP</h1>
-                <p class="text-sm opacity-90 mb-6 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
-                
-                <div class="bg-orange-500 text-white rounded-[32px] px-8 py-5 mb-8 shadow-xl inline-block border-2 border-orange-400/50 w-full max-w-[280px]">
-                    <p id="countdown-label" class="text-[11px] font-bold uppercase tracking-wider mb-1 opacity-90">PO Ditutup Jam 20.00 WIB</p>
-                    <p id="countdown-timer" class="text-4xl font-extrabold font-mono tracking-widest drop-shadow-md">00:00:00</p>
-                </div>
+<body class="max-w-md mx-auto relative min-h-screen">
 
-                <div class="grid grid-cols-1 gap-4 w-full max-w-xs mx-auto">
-                    <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl btn-hover border border-orange-50">Order Sekarang (Ready)</button>
-                    <button onclick="startOrder('Pre-Order')" class="bg-[#D7A86E] text-white font-extrabold py-5 rounded-custom shadow-lg btn-hover border border-white/20">Pre-Order Besok ⏳</button>
-                </div>
+<section id="page-home" class="min-h-screen flex flex-col justify-center">
+
+    <div class="bg-hero-doodle p-8 text-center text-chocolate h-full flex flex-col justify-center rounded-b-3xl shadow-md">
+
+        <h1 class="text-3xl font-extrabold mb-2">Solusi Lapar Anak FKIP</h1>
+        <p class="text-sm italic mb-4">Murah, Enak, Diantar ke Kos 🚚</p>
+
+        <p class="text-sm font-bold text-red-600 mb-1">
+            🔥 Sisa hari ini: <span id="total-stock">--</span> / 30
+        </p>
+
+        <p class="text-xs mb-6">⭐ 120+ mahasiswa sudah order minggu ini</p>
+
+        <div class="bg-orange-500 text-white p-4 rounded-xl mb-6 shadow-lg">
+            <p class="text-xs font-semibold mb-1">PO Ditutup Jam 20.00</p>
+            <p id="countdown" class="text-3xl font-extrabold tracking-widest">00:00:00</p>
+        </div>
+
+        <button onclick="startOrder('ready')" class="bg-white text-orange-600 p-4 w-full rounded-xl font-bold mb-3 shadow-md btn-hover">
+            🔥 Pesan Sekarang (Sebelum Habis)
+        </button>
+
+        <button onclick="startOrder('po')" class="bg-yellow-600 text-white p-4 w-full rounded-xl font-bold shadow-md btn-hover">
+            Pre-Order Besok ⏳
+        </button>
+
+    </div>
+
+</section>
+
+<section id="page-menu" class="hidden p-6 pb-24">
+
+    <button onclick="showPage('page-home')" class="text-orange-600 font-bold mb-6 flex items-center gap-2 btn-hover">
+        ← Kembali
+    </button>
+
+    <h2 class="text-2xl font-extrabold text-chocolate mb-4">Pilih Menu</h2>
+    
+    <div id="menu-list" class="space-y-3"></div>
+
+    <div id="cart-bar" class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] hidden max-w-md mx-auto rounded-t-2xl flex justify-between items-center">
+        <div>
+            <p class="text-xs text-gray-500 font-semibold">Total Pesanan</p>
+            <p class="text-lg font-extrabold text-orange-600">Rp <span id="total-price">0</span></p>
+        </div>
+        <button onclick="goToPayment()" class="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold btn-hover">
+            Lanjut Bayar
+        </button>
+    </div>
+
+</section>
+
+<section id="page-payment" class="hidden p-6">
+
+    <button onclick="showPage('page-menu')" class="text-orange-600 font-bold mb-6 flex items-center gap-2 btn-hover">
+        ← Kembali ke Menu
+    </button>
+
+    <h2 class="text-2xl font-extrabold text-chocolate mb-6">Pilih Metode Pembayaran</h2>
+
+    <div class="bg-white p-4 rounded-xl shadow-sm mb-6 flex items-center gap-3">
+        <input type="checkbox" id="member-check" class="w-5 h-5 text-orange-500 focus:ring-orange-500 border-gray-300 rounded">
+        <label for="member-check" class="font-semibold text-gray-700">Saya Member FKIP (Min. 10k)</label>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <button onclick="finalOrder('COD')" class="bg-blue-600 text-white p-4 rounded-xl font-bold shadow-md btn-hover">
+            Bayar COD 💵
+        </button>
+        <button onclick="finalOrder('Transfer')" class="bg-green-600 text-white p-4 rounded-xl font-bold shadow-md btn-hover">
+            Transfer Bank 💳
+        </button>
+    </div>
+
+</section>
+
+<script>
+
+const menu = [
+    {id:1, n:"Lumpia Balado", p:5000},
+    {id:2, n:"Tahu Bakso", p:10000},
+    {id:3, n:"Cilok", p:5000}
+];
+
+let cart = {};
+let orderType = "";
+
+const stok = {1:10, 2:10, 3:10};
+
+function showPage(id){
+    document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+
+function startOrder(type){
+    if(new Date().getHours() >= 20){
+        alert("Mohon maaf, PO untuk hari ini sudah ditutup.");
+        return;
+    }
+    orderType = type;
+    renderMenu();
+    showPage("page-menu");
+}
+
+function renderMenu(){
+    let html = "";
+    menu.forEach(m => {
+        // Penambahan styling pada list menu agar lebih menarik
+        html += `
+        <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-gray-800">${m.n}</h3>
+                <p class="text-sm font-semibold text-orange-500">Rp${m.p.toLocaleString('id-ID')}</p>
             </div>
-        </div>
-
-        <div class="px-6 -mt-8 mb-8 relative z-20">
-            <div class="glass p-5 rounded-custom shadow-xl border-t-4 border-yellow-500">
-                <h3 class="text-chocolate font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">🕒 Jadwal Operasi FKF</h3>
-                <div class="grid grid-cols-2 gap-4 text-[11px]">
-                    <div class="bg-orange-50 p-2 rounded-xl">
-                        <p class="font-extrabold text-orange-700">Senin & Selasa</p>
-                        <p>• 08.00 AM - 09.30 AM</p>
-                        <p>• 12.00 PM - 02.00 PM</p>
-                        <p>• 05.00 PM - 06.00 PM</p>
-                    </div>
-                    <div class="bg-yellow-50 p-2 rounded-xl border border-yellow-100">
-                        <p class="font-extrabold text-yellow-700">Jumat</p>
-                        <p>• 08.00 AM - 11.00 AM</p>
-                        <p>• 04.00 PM - 06.00 PM</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="px-6 mb-8">
-            <h3 class="text-chocolate font-extrabold text-sm mb-4 px-2">📝 Cara Order di Website:</h3>
-            <div class="grid grid-cols-1 gap-3">
-                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 border border-white/80">
-                    <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">1</span>
-                    <p class="text-xs font-semibold text-chocolate">Pilih menu favoritmu & klik tambah (+)</p>
-                </div>
-                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 border border-white/80">
-                    <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">2</span>
-                    <p class="text-xs font-semibold text-chocolate">Masuk ke keranjang & pilih metode bayar</p>
-                </div>
-                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 border border-white/80">
-                    <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</span>
-                    <p class="text-xs font-semibold text-chocolate">Selesaikan pembayaran & kirim bukti ke WA</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="px-6">
-            <div class="bg-chocolate/5 p-5 rounded-custom border-2 border-dashed border-[#D7A86E]/40">
-                <h2 class="font-extrabold text-chocolate mb-2 flex items-center gap-2">🚚 Delivery Area</h2>
-                <p class="text-[11px] text-chocolate/80">Khusus area Untirta & sekitarnya (Kab. Serang). <br><b>Gratis ongkir</b> untuk jarak ≤ 4km!</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="page-menu" class="hidden py-8 px-6 min-h-screen pb-32">
-        <button onclick="showSection('page-home')" class="mb-4 text-orange-600 font-bold flex items-center gap-1"><span>←</span> Kembali</button>
-        <div id="header-menu" class="p-6 rounded-2xl mb-8 text-white shadow-lg">
-            <h2 id="menu-title" class="text-2xl font-extrabold"></h2>
-            <p id="menu-desc" class="text-xs opacity-90"></p>
-        </div>
-
-        <div class="space-y-4 max-w-md mx-auto" id="menu-list"></div>
-
-        <div id="cart-bar" class="fixed bottom-6 left-6 right-6 glass p-4 rounded-custom shadow-2xl border border-orange-200 hidden z-50">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[10px] text-gray-500 font-bold uppercase">Total Pesanan</p>
-                    <p id="cart-total-price" class="text-xl font-extrabold text-orange-600">Rp0</p>
-                </div>
-                <button onclick="goToPayment()" class="bg-orange-500 text-white px-8 py-3 rounded-2xl font-extrabold shadow-lg btn-hover">Lanjut</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="page-payment-type" class="hidden py-10 px-6 min-h-screen bg-gray-50">
-        <button onclick="showSection('page-menu')" class="mb-6 text-orange-600 font-bold">← Ganti Menu</button>
-        <h2 class="text-2xl font-extrabold mb-4 text-center text-chocolate">Metode Pembayaran</h2>
-        <div id="order-summary-box" class="bg-white p-5 rounded-2xl mb-8 shadow-sm border border-gray-100 text-sm"></div>
-
-        <div class="grid gap-4 max-w-xs mx-auto">
-            <button onclick="finalOrder('COD')" class="p-6 bg-white rounded-custom shadow-sm border-b-4 border-gray-200 btn-hover">
-                <p class="text-3xl mb-2">💸</p><p class="font-bold text-gray-700">COD (Bayar di Kos)</p>
+            <button onclick="add(${m.id})" class="bg-orange-100 text-orange-600 w-10 h-10 rounded-full font-extrabold text-xl btn-hover flex items-center justify-center">
+                +
             </button>
-            <button onclick="showSection('page-transfer-list')" class="p-6 bg-orange-500 text-white rounded-custom shadow-lg border-b-4 border-orange-700 btn-hover">
-                <p class="text-3xl mb-2">💳</p><p class="font-bold">Transfer / E-Wallet</p>
-            </button>
-        </div>
-    </section>
+        </div>`;
+    });
+    document.getElementById("menu-list").innerHTML = html;
+}
 
-    <section id="page-transfer-list" class="hidden py-8 px-6 min-h-screen bg-white">
-        <button onclick="showSection('page-payment-type')" class="mb-6 text-orange-600 font-bold">← Kembali</button>
-        <h2 class="text-2xl font-extrabold mb-6 text-chocolate">Pilih E-Wallet / Bank</h2>
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="showTransferDetail('QRIS', 'Scan Semua Aplikasi')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-orange-600 btn-hover">🖼️ QRIS</button>
-            <button onclick="showTransferDetail('DANA', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-blue-500 btn-hover">🔵 DANA</button>
-            <button onclick="showTransferDetail('OVO', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-purple-600 btn-hover">🟣 OVO</button>
-            <button onclick="showTransferDetail('SeaBank', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl font-bold text-orange-400 btn-hover">🟠 SeaBank</button>
-        </div>
-    </section>
+function add(id){
+    if(stok[id] <= 0) return alert("Maaf, stok item ini sudah habis!");
+    cart[id] = (cart[id] || 0) + 1;
+    stok[id]--;
+    updateTotal();
+    updateCart();
+}
 
-    <section id="page-transfer-final" class="hidden py-10 px-6 min-h-screen text-center">
-        <h2 class="text-2xl font-extrabold mb-10 text-chocolate" id="final-bank-name"></h2>
-        <div class="bg-orange-50 p-8 rounded-custom mb-10 border-2 border-dashed border-orange-200">
-            <p id="final-target" class="text-2xl font-mono font-bold text-orange-600"></p>
-        </div>
-        <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl btn-hover">Kirim Bukti Bayar ke WA</button>
-    </section>
+function updateCart(){
+    let total = 0;
+    for(let id in cart){
+        let item = menu.find(m => m.id == id);
+        total += item.p * cart[id];
+    }
+    document.getElementById("total-price").innerText = total.toLocaleString('id-ID');
+    document.getElementById("cart-bar").classList.remove("hidden");
+}
 
-    <script>
-        /* ============================================================
-           FUNGSI COUNTDOWN REAL-TIME (JAM 20:00)
-           ============================================================ */
-        function initCountdown() {
-            const timerEl = document.getElementById('countdown-timer');
-            const labelEl = document.getElementById('countdown-label');
-            
-            function update() {
-                const now = new Date();
-                const target = new Date();
-                target.setHours(20, 0, 0, 0); // Target jam 20.00 hari ini
+function updateTotal(){
+    let t = 0;
+    for(let k in stok) t += stok[k];
+    document.getElementById("total-stock").innerText = t;
+}
+updateTotal();
 
-                const diff = target - now;
+function goToPayment(){
+    showPage("page-payment");
+}
 
-                if (diff <= 0) {
-                    timerEl.innerText = "PO Sudah Ditutup Hari Ini";
-                    timerEl.classList.remove('text-4xl', 'font-mono', 'tracking-widest');
-                    timerEl.classList.add('text-sm', 'tracking-normal', 'mt-1');
-                    if(labelEl) labelEl.style.display = 'none';
-                } else {
-                    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const s = Math.floor((diff % (1000 * 60)) / 1000);
-                    
-                    timerEl.innerText = 
-                        String(h).padStart(2, '0') + ":" + 
-                        String(m).padStart(2, '0') + ":" + 
-                        String(s).padStart(2, '0');
-                }
-            }
-            update(); // Panggil sekali langsung agar tidak nunggu 1 detik
-            setInterval(update, 1000);
-        }
-        initCountdown();
+function finalOrder(method){
+    let total = 0;
+    for(let id in cart){
+        let item = menu.find(m => m.id == id);
+        total += item.p * cart[id];
+    }
 
-        /* ============================================================
-           BAGIAN SETTING MANUAL STOK
-           ============================================================ */
-        const DATA_STOK = {
-            1: 10,  
-            2: 5,   
-            3: 15,  
-            4: 8,   
-            5: 3    
-        };
-        /* ============================================================ */
+    let isMember = document.getElementById("member-check").checked;
 
-        const menuData = [
-            { id: 1, name: "Lumpia Kering Balado", price: 5000, icon: "🌯", badge: "🔥 Paling Laris" },
-            { id: 2, name: "Tahu Bakso", price: 10000, icon: "🍱", badge: "⭐ Favorit FKIP" },
-            { id: 3, name: "Cilok Pedas", price: 5000, icon: "🍡", badge: "" },
-            { id: 4, name: "Lumpia Kering Asin", price: 5000, icon: "🌯", badge: "" },
-            { id: 5, name: "Bolu Coklat Lumer", price: 10000, icon: "🍰", badge: "✨ Premium" }
-        ];
+    if(isMember && total < 10000){
+        alert("Pembelian khusus member minimal Rp10.000 ya!");
+        return;
+    }
 
-        let cart = {};
-        let orderType = "";
-        let selectedProvider = "";
+    let msg = `Halo, saya ingin order FKF (${orderType.toUpperCase()}) via *${method}*:\n\n`;
+    for(let id in cart){
+        let item = menu.find(m => m.id == id);
+        msg += `- ${item.n} (x${cart[id]})\n`;
+    }
+    
+    msg += `\nTotal: *Rp${total.toLocaleString('id-ID')}*`;
+    if(isMember) msg += `\n(Saya Member FKIP)`;
 
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
+    window.open("https://wa.me/6283144628727?text=" + encodeURIComponent(msg));
+}
 
-        function startOrder(type) {
-            orderType = type;
-            renderMenu();
-            showSection('page-menu');
-        }
+function countdown(){
+    let now = new Date();
+    let target = new Date();
+    target.setHours(20, 0, 0);
 
-        function renderMenu() {
-            const list = document.getElementById('menu-list');
-            const header = document.getElementById('header-menu');
-            
-            header.className = (orderType === 'Pre-Order') ? "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-po" : "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-fkf";
-            document.getElementById('menu-title').innerText = (orderType === 'Pre-Order') ? "Pre-Order Besok ⏳" : "Ready Hari Ini 🔥";
-            document.getElementById('menu-desc').innerText = "Tersedia sesuai porsi yang ada:";
+    let diff = target - now;
+    if(diff < 0) return document.getElementById("countdown").innerText = "TUTUP";
 
-            list.innerHTML = menuData.map(item => {
-                const stokSisa = DATA_STOK[item.id];
-                const isHabis = stokSisa <= 0;
-                
-                return `
-                <div class="bg-white/80 p-4 rounded-custom shadow-md flex justify-between items-center border border-white/50 ${isHabis ? 'opacity-60 grayscale' : ''}">
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">${item.icon}</span>
-                        <div>
-                            ${item.badge ? `<span class="text-[8px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase">${item.badge}</span>` : ''}
-                            <h3 class="font-bold text-sm text-chocolate">${item.name}</h3>
-                            <p class="text-orange-600 font-bold text-xs">Rp${item.price.toLocaleString('id-ID')}</p>
-                            <p class="text-[10px] font-bold ${isHabis ? 'text-red-500' : 'text-gray-400'} uppercase">Sisa: ${stokSisa} Porsi</p>
-                        </div>
-                    </div>
-                    ${isHabis ? 
-                        `<span class="text-red-500 font-bold text-xs px-4">HABIS</span>` : 
-                        `<div class="flex items-center gap-2 bg-orange-50 rounded-xl p-1">
-                            <button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-white rounded-lg font-bold shadow-sm text-orange-600">-</button>
-                            <span class="font-bold min-w-[15px] text-center text-xs" id="qty-${item.id}">${cart[item.id] || 0}</span>
-                            <button onclick="updateCart(${item.id}, 1)" class="w-8 h-8 bg-orange-500 text-white rounded-lg font-bold shadow-sm">+</button>
-                        </div>`
-                    }
-                </div>
-            `}).join('');
-            updateCartUI();
-        }
+    // Format menjadi 2 digit (01:05:09 bukan 1:5:9)
+    let h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+    let m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+    let s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
 
-        function updateCart(id, change) {
-            const stokSisa = DATA_STOK[id];
-            const currentQty = cart[id] || 0;
-            
-            if(change > 0 && currentQty >= stokSisa) {
-                alert("Maaf Kak, stok menu ini sudah habis!");
-                return;
-            }
+    document.getElementById("countdown").innerText = h + ":" + m + ":" + s;
+}
+setInterval(countdown, 1000);
 
-            cart[id] = currentQty + change;
-            if (cart[id] <= 0) delete cart[id];
-            
-            const qtySpan = document.getElementById(`qty-${id}`);
-            if(qtySpan) qtySpan.innerText = cart[id] || 0;
-            
-            updateCartUI();
-        }
+</script>
 
-        function updateCartUI() {
-            let total = 0;
-            let totalItems = 0;
-            for (let id in cart) {
-                const item = menuData.find(m => m.id == id);
-                total += item.price * cart[id];
-                totalItems += cart[id];
-            }
-            const cartBar = document.getElementById('cart-bar');
-            if (totalItems > 0) {
-                cartBar.classList.remove('hidden');
-                document.getElementById('cart-total-price').innerText = "Rp" + total.toLocaleString('id-ID');
-            } else {
-                cartBar.classList.add('hidden');
-            }
-        }
-
-        function goToPayment() {
-            let summaryHTML = `<p class="font-bold mb-3 border-b pb-2 text-chocolate italic">Pesanan Kamu:</p>`;
-            let total = 0;
-            for (let id in cart) {
-                const item = menuData.find(m => m.id == id);
-                summaryHTML += `<div class="flex justify-between mb-1 text-xs">
-                    <span>${item.name} (x${cart[id]})</span>
-                    <span>Rp${(item.price * cart[id]).toLocaleString('id-ID')}</span>
-                </div>`;
-                total += item.price * cart[id];
-            }
-            summaryHTML += `<div class="flex justify-between mt-3 pt-3 border-t-2 border-dashed font-extrabold text-orange-600 text-base">
-                <span>TOTAL</span>
-                <span>Rp${total.toLocaleString('id-ID')}</span>
-            </div>`;
-            document.getElementById('order-summary-box').innerHTML = summaryHTML;
-            showSection('page-payment-type');
-        }
-
-        function getCartText() {
-            let text = "";
-            let total = 0;
-            for (let id in cart) {
-                const item = menuData.find(m => m.id == id);
-                text += `• ${item.name} (x${cart[id]})\n`;
-                total += item.price * cart[id];
-            }
-            return { text, total };
-        }
-
-        function finalOrder(method) {
-            const { text, total } = getCartText();
-            const noWA = "6283144628727";
-            let msg = `Halo FKF! Saya mau order *${orderType}*\n\n` +
-                      `🛒 *PESANAN:*\n${text}\n` +
-                      `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
-                      `💳 *METODE:* ${method}\n\n` +
-                      `Nama:\nAlamat:`;
-            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function showTransferDetail(provider, target) {
-            selectedProvider = provider;
-            document.getElementById('final-bank-name').innerText = "Bayar via " + provider;
-            document.getElementById('final-target').innerText = target;
-            showSection('page-transfer-final');
-        }
-
-        function sendToWhatsAppWithPayment() {
-            const { text, total } = getCartText();
-            const noWA = "6283144628727";
-            let msg = `Halo FKF! Saya sudah transfer via *${selectedProvider}*\n\n` +
-                      `🛒 *DETAIL PESANAN:*\n${text}\n` +
-                      `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
-                      `📌 *JENIS:* ${orderType}\n\n` +
-                      `*(Bukti transfer kirim setelah ini)*`;
-            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-    </script>
 </body>
 </html>
