@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FKF - Solusi Lapar Anak FKIP</title>
+    <title>Food Kos - Solusi Lapar Anak FKIP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -39,11 +39,11 @@
         
         <div class="bg-hero-doodle pt-16 pb-24 px-6 text-center text-chocolate relative overflow-hidden shadow-lg glow-bg rounded-b-[40px]">
             <div class="relative z-10">
-                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate">Fantastic Kos Food</span>
+                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate">Food Kos</span>
                 <h1 class="text-4xl font-extrabold mb-2 leading-tight">Solusi Lapar<br>Anak FKIP</h1>
                 <p class="text-sm opacity-90 mb-2 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
                 
-                <p class="text-sm font-bold text-red-600 mb-1">🔥 Sisa hari ini: <span id="total-stock">--</span> / 50 porsi</p>
+                <p class="text-sm font-bold text-red-600 mb-1">🔥 Sisa hari ini: <span id="total-stock">--</span> / 230 porsi</p>
                 <p class="text-xs mb-6 font-semibold">⭐ Sudah dipesan 120+ mahasiswa FKIP minggu ini</p>
                 
                 <div class="bg-orange-500 text-white rounded-[32px] px-8 py-5 mb-8 shadow-xl inline-block border-2 border-orange-400/50 w-full max-w-[280px]">
@@ -60,7 +60,7 @@
 
         <div class="px-6 -mt-8 mb-8 relative z-20">
             <div class="glass p-5 rounded-custom shadow-xl border-t-4 border-yellow-500">
-                <h3 class="text-chocolate font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                <h3 class="text-chocolate font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">🕒 Jadwal Operasi Food Kos</h3>
                 🕒 Jadwal Operasi FKF</h3>
                 <div class="grid grid-cols-2 gap-4 text-[11px]">
                     <div class="bg-orange-50 p-2 rounded-xl">
@@ -202,11 +202,11 @@
            BAGIAN SETTING MANUAL STOK
            ============================================================ */
         const DATA_STOK = {
-            1: 10,  
-            2: 5,   
-            3: 15,  
-            4: 8,   
-            5: 3    
+            1: 50,  
+            2: 50,   
+            3: 50,  
+            4: 50,   
+            5: 30    
         };
         /* ============================================================ */
 
@@ -375,7 +375,7 @@
         function finalOrder(method) {
             const { text, total } = getCartText();
             const noWA = "6283144628727";
-            let msg = `Halo FKF! Saya mau order *${orderType}*\n\n` +
+            let msg = `Halo Food Kos! Saya mau order *${orderType}*\n\n` +
                       `🛒 *PESANAN:*\n${text}\n` +
                       `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
                       `💳 *METODE:* ${method}\n\n` +
@@ -393,10 +393,11 @@
         function sendToWhatsAppWithPayment() {
             const { text, total } = getCartText();
             const noWA = "6283144628727";
-            let msg = `Halo FKF! Saya sudah transfer via *${selectedProvider}*\n\n` +
+            let msg = `Halo Food Kos! Saya sudah transfer via *${selectedProvider}*\n\n` +
                       `🛒 *DETAIL PESANAN:*\n${text}\n` +
                       `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
                       `📌 *JENIS:* ${orderType}\n\n` +
+                      `Nama:\nAlamat:`\nUntuk Jam:`;
                       `*(Bukti transfer kirim setelah ini)*`;
             window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
         }
