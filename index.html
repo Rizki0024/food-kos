@@ -9,100 +9,97 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         .bg-gradient-fkf { background: linear-gradient(135deg, #FF7A00 0%, #FFD54F 100%); }
-        .bg-gradient-po { background: linear-gradient(135deg, #4433ff 0%, #00d2ff 100%); } /* Warna biru buat bedakan PO */
+        .bg-gradient-po { background: linear-gradient(135deg, #4433ff 0%, #00d2ff 100%); }
         .rounded-custom { border-radius: 24px; }
-        .hidden { display: none; }
-        .active-scale:active { transform: scale(0.95); transition: 0.1s; }
+        .hidden { display: none !important; }
+        .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .btn-hover:active { transform: scale(0.95); }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased min-h-screen">
 
     <section id="page-home" class="bg-gradient-fkf min-h-screen flex flex-col items-center justify-center px-6 text-white text-center">
-        <h1 class="text-4xl font-extrabold mb-2">Solusi Lapar<br>Anak FKIP</h1>
-        <p class="text-sm opacity-90 mb-10">Murah, Enak, Diantar ke Kos! 🚚</p>
+        <div class="mb-6 bg-white/20 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Fantastic Kos Food</div>
+        <h1 class="text-4xl font-extrabold mb-2 leading-tight">Solusi Lapar<br>Anak FKIP</h1>
+        <p class="text-sm opacity-90 mb-10 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
         
         <div class="grid grid-cols-1 gap-4 w-full max-w-xs">
-            <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl active-scale">Order Sekarang (Ready)</button>
-            <button onclick="startOrder('Pre-Order')" class="bg-black/20 text-white font-bold py-5 rounded-custom border border-white/40 active-scale">Pre-Order Besok ⏳</button>
+            <button onclick="startOrder('Ready Today')" class="btn-hover bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl cursor-pointer">
+                Order Sekarang (Ready)
+            </button>
+            <button onclick="startOrder('Pre-Order')" class="btn-hover bg-black/20 text-white font-bold py-5 rounded-custom border border-white/40 cursor-pointer">
+                Pre-Order Besok ⏳
+            </button>
         </div>
     </section>
 
-    <section id="page-menu" class="hidden py-8 px-6 min-h-screen">
-        <button onclick="backToHome()" class="mb-4 text-orange-600 font-bold">← Kembali</button>
-        <div id="header-menu" class="p-4 rounded-2xl mb-6 text-white shadow-lg">
-            <h2 id="menu-title" class="text-xl font-extrabold"></h2>
+    <section id="page-menu" class="hidden py-8 px-6 min-h-screen bg-[#FFF8E1]">
+        <button onclick="showSection('page-home')" class="mb-4 text-orange-600 font-bold flex items-center gap-2"><span>←</span> Kembali</button>
+        <div id="header-menu" class="p-6 rounded-2xl mb-6 text-white shadow-lg">
+            <h2 id="menu-title" class="text-2xl font-extrabold"></h2>
             <p id="menu-desc" class="text-xs opacity-90"></p>
         </div>
 
-        <div class="space-y-4">
-            <div onclick="selectMenu('Lumpia Kering Balado', '5k')" class="bg-white p-4 rounded-custom shadow-md flex justify-between items-center border border-gray-100 active-scale">
+        <div class="space-y-4 max-w-md mx-auto">
+            <div onclick="selectMenu('Lumpia Kering Balado', '5k')" class="bg-white p-4 rounded-custom shadow-md flex justify-between items-center border-2 border-transparent hover:border-orange-400 cursor-pointer transition-all">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🌯</span>
                     <div><h3 class="font-bold">Lumpia Balado</h3><p class="text-orange-600 font-bold">5k</p></div>
                 </div>
-                <span class="text-orange-500 font-bold">Pilih</span>
+                <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-bold">Pilih</span>
             </div>
-            <div onclick="selectMenu('Tahu Bakso', '10k')" class="bg-white p-4 rounded-custom shadow-md flex justify-between items-center border border-gray-100 active-scale">
+            <div onclick="selectMenu('Tahu Bakso', '10k')" class="bg-white p-4 rounded-custom shadow-md flex justify-between items-center border-2 border-transparent hover:border-orange-400 cursor-pointer transition-all">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🍱</span>
-                    <div><h3 class="font-bold">Tahu Bakso</h3><p class="text-orange-600 font-bold">10k</p></div>
+                    <div><h3 class="font-bold text-sm">Tahu Bakso</h3><p class="text-orange-600 font-bold text-sm">10k</p></div>
                 </div>
-                <span class="text-orange-500 font-bold">Pilih</span>
+                <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-bold">Pilih</span>
             </div>
         </div>
     </section>
 
-    <section id="page-payment-type" class="hidden py-8 px-6 min-h-screen bg-gray-50 text-center">
-        <h2 class="text-2xl font-extrabold mb-8">Pilih Pembayaran</h2>
+    <section id="page-payment-type" class="hidden py-10 px-6 min-h-screen bg-gray-50">
+        <button onclick="showSection('page-menu')" class="mb-6 text-orange-600 font-bold">← Ganti Menu</button>
+        <h2 class="text-2xl font-extrabold mb-2 text-center">Pilih Pembayaran</h2>
+        <p class="text-center text-gray-500 text-sm mb-10">Pesanan: <span id="summary-text" class="font-bold text-orange-600"></span></p>
+
         <div class="grid gap-4 max-w-xs mx-auto">
-            <button onclick="finalOrder('COD')" class="p-6 bg-white rounded-custom shadow-sm border-b-4 border-gray-200 active-scale">
+            <button onclick="finalOrder('COD')" class="p-6 bg-white rounded-custom shadow-sm border-b-4 border-gray-200 btn-hover">
                 <p class="text-3xl mb-2">💸</p>
-                <p class="font-bold">COD (Bayar di Kos)</p>
+                <p class="font-bold text-gray-700">COD (Bayar di Kos)</p>
             </button>
-            <button onclick="showTransferOptions()" class="p-6 bg-orange-500 text-white rounded-custom shadow-lg border-b-4 border-orange-700 active-scale">
+            <button onclick="showSection('page-transfer-list')" class="p-6 bg-orange-500 text-white rounded-custom shadow-lg border-b-4 border-orange-700 btn-hover">
                 <p class="text-3xl mb-2">💳</p>
                 <p class="font-bold">Transfer / E-Wallet</p>
             </button>
         </div>
     </section>
+
     <section id="page-transfer-list" class="hidden py-8 px-6 min-h-screen bg-white">
         <button onclick="showSection('page-payment-type')" class="mb-4 text-orange-600 font-bold">← Kembali</button>
-        <h2 class="text-2xl font-extrabold mb-6">Pilih E-Wallet / Bank</h2>
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="showTransferDetail('QRIS', 'Scan Semua Aplikasi')" class="p-4 border-2 border-gray-100 rounded-2xl active-scale">
-                <p class="font-bold text-orange-600">🖼️ QRIS</p>
-            </button>
-            <button onclick="showTransferDetail('DANA', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl active-scale">
-                <p class="font-bold text-blue-500">🔵 DANA</p>
-            </button>
-            <button onclick="showTransferDetail('OVO', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl active-scale">
-                <p class="font-bold text-purple-600">🟣 OVO</p>
-            </button>
-            <button onclick="showTransferDetail('GoPay', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl active-scale">
-                <p class="font-bold text-green-500">🟢 GoPay</p>
-            </button>
-            <button onclick="showTransferDetail('SeaBank', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl active-scale">
-                <p class="font-bold text-orange-400">🟠 SeaBank</p>
-            </button>
-            <button onclick="showTransferDetail('BNI', '1234567890')" class="p-4 border-2 border-gray-100 rounded-2xl active-scale">
-                <p class="font-bold text-orange-800">🏦 BNI</p>
-            </button>
+        <h2 class="text-2xl font-extrabold mb-6">Mau Pakai Apa?</h2>
+        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+            <button onclick="showTransferDetail('QRIS', 'Scan Semua Aplikasi')" class="p-4 border-2 border-gray-100 rounded-2xl btn-hover font-bold text-orange-600">🖼️ QRIS</button>
+            <button onclick="showTransferDetail('DANA', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl btn-hover font-bold text-blue-500">🔵 DANA</button>
+            <button onclick="showTransferDetail('OVO', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl btn-hover font-bold text-purple-600">🟣 OVO</button>
+            <button onclick="showTransferDetail('GoPay', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl btn-hover font-bold text-green-500">🟢 GoPay</button>
+            <button onclick="showTransferDetail('SeaBank', '083144628727')" class="p-4 border-2 border-gray-100 rounded-2xl btn-hover font-bold text-orange-400">🟠 SeaBank</button>
+            <button onclick="showTransferDetail('BNI', '1234567890')" class="p-4 border-2 border-gray-100 rounded-2xl btn-hover font-bold text-orange-800">🏦 BNI</button>
         </div>
     </section>
 
-    <section id="page-transfer-final" class="hidden py-8 px-6 min-h-screen bg-white text-center">
+    <section id="page-transfer-final" class="hidden py-10 px-6 min-h-screen bg-white text-center">
         <h2 class="text-2xl font-extrabold mb-2" id="final-bank-name"></h2>
-        <p class="text-sm text-gray-500 mb-8 italic">Silakan transfer sesuai detail di bawah:</p>
+        <p class="text-sm text-gray-400 mb-8 italic italic">Silakan transfer ke detail berikut:</p>
         
         <div class="bg-orange-50 p-8 rounded-custom mb-10 border-2 border-dashed border-orange-200">
-            <p class="text-xs text-gray-400 uppercase font-bold mb-2">Nomor Tujuan / Gambar</p>
-            <p id="final-target" class="text-2xl font-mono font-bold text-orange-600"></p>
+            <p id="final-target" class="text-2xl font-mono font-bold text-orange-600 select-all"></p>
             <div id="qris-area" class="hidden mt-4 bg-gray-200 aspect-square rounded-xl flex items-center justify-center font-bold text-gray-400">
                 [TEMPEL FOTO QRIS DISINI]
             </div>
         </div>
 
-        <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl active-scale">Kirim Bukti Bayar ke WA</button>
+        <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl btn-hover">Kirim Bukti Bayar ke WA</button>
     </section>
 
     <script>
@@ -111,10 +108,16 @@
         let selectedPrice = "";
         let selectedProvider = "";
 
+        // Fungsi Utama untuk Pindah Halaman
         function showSection(id) {
+            // Sembunyikan semua section
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            window.scrollTo(0,0);
+            // Munculkan section yang dituju
+            const target = document.getElementById(id);
+            if(target) {
+                target.classList.remove('hidden');
+                window.scrollTo(0,0);
+            }
         }
 
         function startOrder(type) {
@@ -126,27 +129,25 @@
             if(type === 'Pre-Order') {
                 header.className = "p-6 rounded-2xl mb-6 text-white shadow-lg bg-gradient-po";
                 title.innerText = "Pre-Order Besok ⏳";
-                desc.innerText = "Pesanan akan dikirim besok sesuai jadwal.";
+                desc.innerText = "Khusus pengiriman besok pagi/siang.";
             } else {
                 header.className = "p-6 rounded-2xl mb-6 text-white shadow-lg bg-gradient-fkf";
                 title.innerText = "Ready Hari Ini 🔥";
-                desc.innerText = "Pesan sekarang, langsung antar!";
+                desc.innerText = "Pesan sekarang, langsung antar ke kos!";
             }
             showSection('page-menu');
         }
 
-        function backToHome() { showSection('page-home'); }
         function selectMenu(name, price) {
             selectedFood = name;
             selectedPrice = price;
+            document.getElementById('summary-text').innerText = name + " (" + price + ")";
             showSection('page-payment-type');
         }
 
-        function showTransferOptions() { showSection('page-transfer-list'); }
-
         function showTransferDetail(provider, target) {
             selectedProvider = provider;
-            document.getElementById('final-bank-name').innerText = "Transfer via " + provider;
+            document.getElementById('final-bank-name').innerText = "Bayar via " + provider;
             document.getElementById('final-target').innerText = target;
             
             const qrisArea = document.getElementById('qris-area');
@@ -158,23 +159,23 @@
 
         function finalOrder(method) {
             const noWA = "6283144628727";
-            let msg = Halo FKF! Saya mau order *${orderType}*\n\n +
-                      🍱 Menu: ${selectedFood}\n +
-                      💰 Harga: ${selectedPrice}\n +
-                      💳 Metode: ${method}\n\n +
-                      Nama:\nAlamat:\nJam Antar:;
-            window.open(https://wa.me/${noWA}?text=${encodeURIComponent(msg)}, '_blank');
+            let msg = `Halo FKF! Saya mau pesan *${selectedFood}*\n` +
+                      `Jenis: ${orderType}\n` +
+                      `Harga: ${selectedPrice}\n` +
+                      `Metode: ${method}\n\n` +
+                      `Nama:\nAlamat:\nJam Antar:`;
+            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function sendToWhatsAppWithPayment() {
             const noWA = "6283144628727";
-            let msg = Halo FKF! Saya sudah transfer via *${selectedProvider}*\n\n +
-                      📌 *DETAIL PESANAN*\n +
-                      • Jenis: ${orderType}\n +
-                      • Menu: ${selectedFood}\n +
-                      • Total: ${selectedPrice}\n\n +
-                      Nama:\nAlamat:\n\n*(Saya akan kirimkan bukti transfer setelah ini)*;
-            window.open(https://wa.me/${noWA}?text=${encodeURIComponent(msg)}, '_blank');
+            let msg = `Halo FKF! Saya sudah transfer via *${selectedProvider}*\n\n` +
+                      `📌 *DETAIL PESANAN*\n` +
+                      `• Menu: ${selectedFood}\n` +
+                      `• Total: ${selectedPrice}\n` +
+                      `• Jenis: ${orderType}\n\n` +
+                      `Nama:\nAlamat:\n\n*(Bukti transfer saya kirim setelah ini)*`;
+            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
 </body>
