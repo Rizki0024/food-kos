@@ -41,7 +41,10 @@
             <div class="relative z-10">
                 <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate">Fantastic Kos Food</span>
                 <h1 class="text-4xl font-extrabold mb-2 leading-tight">Solusi Lapar<br>Anak FKIP</h1>
-                <p class="text-sm opacity-90 mb-6 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
+                <p class="text-sm opacity-90 mb-2 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
+                
+                <p class="text-sm font-bold text-red-600 mb-1">🔥 Sisa hari ini: <span id="total-stock">--</span> / 50 porsi</p>
+                <p class="text-xs mb-6 font-semibold">⭐ Sudah dipesan 120+ mahasiswa FKIP minggu ini</p>
                 
                 <div class="bg-orange-500 text-white rounded-[32px] px-8 py-5 mb-8 shadow-xl inline-block border-2 border-orange-400/50 w-full max-w-[280px]">
                     <p id="countdown-label" class="text-[11px] font-bold uppercase tracking-wider mb-1 opacity-90">PO Ditutup Jam 20.00 WIB</p>
@@ -49,15 +52,16 @@
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 w-full max-w-xs mx-auto">
-                    <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl btn-hover border border-orange-50">Order Sekarang (Ready)</button>
-                    <button onclick="startOrder('Pre-Order')" class="bg-[#D7A86E] text-white font-extrabold py-5 rounded-custom shadow-lg btn-hover border border-white/20">Pre-Order Besok ⏳</button>
+                    <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl btn-hover border border-orange-50">🔥 Pesan Sekarang (Sebelum Habis)</button>
+                    <button onclick="startOrder('Pre-Order')" class="bg-[#D7A86E] text-white font-extrabold py-5 rounded-custom shadow-lg btn-hover border border-white/20">Pre-Order Besok ⏳ (Amankan Slot)</button>
                 </div>
             </div>
         </div>
 
         <div class="px-6 -mt-8 mb-8 relative z-20">
             <div class="glass p-5 rounded-custom shadow-xl border-t-4 border-yellow-500">
-                <h3 class="text-chocolate font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">🕒 Jadwal Operasi FKF</h3>
+                <h3 class="text-chocolate font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                🕒 Jadwal Operasi FKF</h3>
                 <div class="grid grid-cols-2 gap-4 text-[11px]">
                     <div class="bg-orange-50 p-2 rounded-xl">
                         <p class="font-extrabold text-orange-700">Senin & Selasa</p>
@@ -114,6 +118,10 @@
                 <div>
                     <p class="text-[10px] text-gray-500 font-bold uppercase">Total Pesanan</p>
                     <p id="cart-total-price" class="text-xl font-extrabold text-orange-600">Rp0</p>
+                    <label class="flex items-center gap-1 mt-1 cursor-pointer">
+                        <input type="checkbox" id="member-check" class="w-3 h-3 accent-orange-500">
+                        <span class="text-[10px] font-bold text-chocolate">Saya Member FKIP</span>
+                    </label>
                 </div>
                 <button onclick="goToPayment()" class="bg-orange-500 text-white px-8 py-3 rounded-2xl font-extrabold shadow-lg btn-hover">Lanjut</button>
             </div>
@@ -214,6 +222,25 @@
         let orderType = "";
         let selectedProvider = "";
 
+        function updateTotalStock() {
+            let totalMaxStock = 0;
+            let totalInCart = 0;
+            
+            for (let id in DATA_STOK) {
+                totalMaxStock += DATA_STOK[id];
+            }
+            for (let id in cart) {
+                totalInCart += cart[id];
+            }
+            
+            const totalStockEl = document.getElementById('total-stock');
+            if (totalStockEl) {
+                totalStockEl.innerText = totalMaxStock - totalInCart;
+            }
+        }
+        // Inisialisasi total stok saat pertama buka
+        updateTotalStock();
+
         function showSection(id) {
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
@@ -221,6 +248,10 @@
         }
 
         function startOrder(type) {
+            if (new Date().getHours() >= 20) {
+                alert("Maaf, PO sudah tutup hari ini 🙏");
+                return;
+            }
             orderType = type;
             renderMenu();
             showSection('page-menu');
@@ -235,8 +266,8 @@
             document.getElementById('menu-desc').innerText = "Tersedia sesuai porsi yang ada:";
 
             list.innerHTML = menuData.map(item => {
-                const stokSisa = DATA_STOK[item.id];
-                const isHabis = stokSisa <= 0;
+                const stokSisa = DATA_STOK[item.id] - (cart[item.id] || 0);
+                const isHabis = stokSisa <= 0 && (cart[item.id] || 0) === 0;
                 
                 return `
                 <div class="bg-white/80 p-4 rounded-custom shadow-md flex justify-between items-center border border-white/50 ${isHabis ? 'opacity-60 grayscale' : ''}">
@@ -246,10 +277,10 @@
                             ${item.badge ? `<span class="text-[8px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase">${item.badge}</span>` : ''}
                             <h3 class="font-bold text-sm text-chocolate">${item.name}</h3>
                             <p class="text-orange-600 font-bold text-xs">Rp${item.price.toLocaleString('id-ID')}</p>
-                            <p class="text-[10px] font-bold ${isHabis ? 'text-red-500' : 'text-gray-400'} uppercase">Sisa: ${stokSisa} Porsi</p>
+                            <p class="text-[10px] font-bold ${stokSisa <= 0 ? 'text-red-500' : 'text-gray-400'} uppercase">Sisa: ${stokSisa} Porsi</p>
                         </div>
                     </div>
-                    ${isHabis ? 
+                    ${stokSisa <= 0 && (cart[item.id] || 0) === 0 ? 
                         `<span class="text-red-500 font-bold text-xs px-4">HABIS</span>` : 
                         `<div class="flex items-center gap-2 bg-orange-50 rounded-xl p-1">
                             <button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-white rounded-lg font-bold shadow-sm text-orange-600">-</button>
@@ -270,7 +301,6 @@
                 alert("Maaf Kak, stok menu ini sudah habis!");
                 return;
             }
-
             cart[id] = currentQty + change;
             if (cart[id] <= 0) delete cart[id];
             
@@ -278,6 +308,10 @@
             if(qtySpan) qtySpan.innerText = cart[id] || 0;
             
             updateCartUI();
+            updateTotalStock();
+            
+            // Re-render menu untuk update sisa di UI teks (Opsional, tapi bagus untuk visual)
+            renderMenu();
         }
 
         function updateCartUI() {
@@ -298,15 +332,26 @@
         }
 
         function goToPayment() {
-            let summaryHTML = `<p class="font-bold mb-3 border-b pb-2 text-chocolate italic">Pesanan Kamu:</p>`;
             let total = 0;
+            for (let id in cart) {
+                const item = menuData.find(m => m.id == id);
+                total += item.price * cart[id];
+            }
+
+            const isMember = document.getElementById('member-check') && document.getElementById('member-check').checked;
+            
+            if (isMember && total < 10000) {
+                alert("Minimal order Rp10.000 untuk member ya kak 😊");
+                return;
+            }
+
+            let summaryHTML = `<p class="font-bold mb-3 border-b pb-2 text-chocolate italic">Pesanan Kamu:</p>`;
             for (let id in cart) {
                 const item = menuData.find(m => m.id == id);
                 summaryHTML += `<div class="flex justify-between mb-1 text-xs">
                     <span>${item.name} (x${cart[id]})</span>
                     <span>Rp${(item.price * cart[id]).toLocaleString('id-ID')}</span>
                 </div>`;
-                total += item.price * cart[id];
             }
             summaryHTML += `<div class="flex justify-between mt-3 pt-3 border-t-2 border-dashed font-extrabold text-orange-600 text-base">
                 <span>TOTAL</span>
@@ -321,7 +366,7 @@
             let total = 0;
             for (let id in cart) {
                 const item = menuData.find(m => m.id == id);
-                text += `• ${item.name} (x${cart[id]})\n`;
+                text += `- ${item.name} (x${cart[id]})\n`;
                 total += item.price * cart[id];
             }
             return { text, total };
