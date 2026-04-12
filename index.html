@@ -47,9 +47,9 @@
         
         <div class="bg-hero-doodle pt-16 pb-24 px-6 text-center text-chocolate relative overflow-hidden shadow-lg glow-bg rounded-b-[40px]">
             
-            <img src="image_5b60e2.jpg" alt="Lumpia Balado" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
+            <img src="image_5b60e2.jpg.jfif" alt="Lumpia Balado" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
             
-            <img src="image_5b63a2.jpg" alt="Tahu Bakso" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
+            <img src="image_5b63a2.jpg.jfif" alt="Tahu Bakso" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
 
             <div class="relative z-10">
                 <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate backdrop-blur-sm">Food Kos</span>
@@ -72,8 +72,8 @@
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 w-full max-w-xs mx-auto">
-                    <button onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl btn-hover border border-orange-50">🔥 Pesan Sekarang (Sebelum Habis)</button>
-                    <button onclick="startOrder('Pre-Order')" class="bg-[#D7A86E] text-white font-extrabold py-5 rounded-custom shadow-lg btn-hover border border-white/20">Pre-Order Besok ⏳ (Amankan Slot)</button>
+                    <button id="btn-ready" onclick="startOrder('Ready Today')" class="bg-white text-orange-600 font-extrabold py-5 rounded-custom shadow-xl btn-hover border border-orange-50 transition-all duration-300">🔥 Pesan Sekarang (Sebelum Habis)</button>
+                    <button id="btn-po" onclick="startOrder('Pre-Order')" class="bg-[#D7A86E] text-white font-extrabold py-5 rounded-custom shadow-lg btn-hover border border-white/20 transition-all duration-300">Pre-Order Besok ⏳ (Amankan Slot)</button>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</span>
-                    <p class="text-xs font-semibold text-chocolate">Selesaikan pembayaran & kirim bukti ke WA</p>
+                    <p class="text-xs font-semibold text-chocolate">Selesaikan pembayaran & isi form pengiriman</p>
                 </div>
             </div>
         </div>
@@ -192,18 +192,76 @@
     </section>
 
     <section id="page-transfer-final" class="hidden py-10 px-6 min-h-screen text-center">
+        <button onclick="showSection('page-transfer-list')" class="mb-6 text-orange-600 font-bold text-left block w-full">← Ganti Bank</button>
         <h2 class="text-2xl font-extrabold mb-10 text-chocolate" id="final-bank-name"></h2>
         <div class="bg-orange-50 p-8 rounded-custom mb-10 border-2 border-dashed border-orange-200">
             <p id="final-target" class="text-2xl font-mono font-bold text-orange-600"></p>
         </div>
-        <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl btn-hover">Kirim Bukti Bayar ke WA</button>
+        <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl btn-hover">Lanjut Isi Data Pengiriman 📝</button>
     </section>
 
-    <button id="sticky-order" onclick="startOrder('Ready Today')" class="fixed bottom-6 right-6 bg-[#FF7A00] text-white px-6 py-4 rounded-full shadow-[0_8px_20px_rgba(255,122,0,0.4)] z-[100] flex items-center justify-center btn-hover border-2 border-white">
+    <section id="page-form" class="hidden py-10 px-6 min-h-screen bg-gray-50">
+        <button onclick="showSection('page-payment-type')" class="mb-6 text-orange-600 font-bold flex items-center gap-1"><span>←</span> Kembali</button>
+        <h2 class="text-2xl font-extrabold mb-6 text-center text-chocolate">Lengkapi Data Order</h2>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-xs mx-auto space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-chocolate mb-2">Nama Lengkap</label>
+                <input type="text" id="input-nama" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500" placeholder="Masukkan nama kamu...">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-chocolate mb-2">Alamat / Nomor Kos</label>
+                <textarea id="input-alamat" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500" placeholder="Contoh: Kos Bu Ayu, Kamar No. 5, Samping Gerbang Untirta..."></textarea>
+            </div>
+
+            <div id="jam-kirim-container" class="hidden">
+                <label class="block text-xs font-bold text-chocolate mb-2">Jam Kirim (Khusus Pre-Order)</label>
+                <select id="input-jam" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 text-gray-700">
+                    <option value="" disabled selected>Pilih Jam Kirim...</option>
+                    <option value="08.00 - 09.30">08.00 - 09.30</option>
+                    <option value="12.00 - 14.00">12.00 - 14.00</option>
+                    <option value="17.00 - 18.00">17.00 - 18.00</option>
+                </select>
+            </div>
+
+            <button onclick="kirimOrderFinal()" class="w-full bg-orange-500 text-white font-extrabold py-4 rounded-xl shadow-lg mt-4 btn-hover">Kirim Order ke WhatsApp 🚀</button>
+        </div>
+    </section>
+
+    <button id="sticky-order" onclick="startOrder('Ready Today')" class="fixed bottom-6 right-6 bg-[#FF7A00] text-white px-6 py-4 rounded-full shadow-[0_8px_20px_rgba(255,122,0,0.4)] z-[100] flex items-center justify-center btn-hover border-2 border-white transition-all duration-300">
         <span class="font-extrabold text-sm">🔥 Order Sekarang</span>
     </button>
 
     <script>
+        // FUNGSI BARU: Mengecek jam operasional dan mendisable tombol secara visual
+        function checkStoreHours() {
+            const currentHour = new Date().getHours();
+            
+            const btnReady = document.getElementById('btn-ready');
+            const stickyOrder = document.getElementById('sticky-order');
+            const btnPO = document.getElementById('btn-po');
+
+            // Logic jam operasional sesuai instruksi
+            const isReadyOpen = currentHour >= 7 && currentHour < 18;
+            const isPOOpen = currentHour >= 7 && currentHour < 20;
+
+            if (btnReady) {
+                if (!isReadyOpen) btnReady.classList.add('opacity-50', 'cursor-not-allowed');
+                else btnReady.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            
+            if (stickyOrder) {
+                if (!isReadyOpen) stickyOrder.classList.add('opacity-50', 'cursor-not-allowed');
+                else stickyOrder.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
+            if (btnPO) {
+                if (!isPOOpen) btnPO.classList.add('opacity-50', 'cursor-not-allowed');
+                else btnPO.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
         function initCountdown() {
             const timerEl = document.getElementById('countdown-timer');
             const labelEl = document.getElementById('countdown-label');
@@ -230,6 +288,9 @@
                         String(m).padStart(2, '0') + ":" + 
                         String(s).padStart(2, '0');
                 }
+                
+                // Memanggil fungsi pengecekan visual setiap detik agar realtime
+                checkStoreHours();
             }
             update();
             setInterval(update, 1000);
@@ -244,18 +305,18 @@
             5: 50    
         };
 
-        // TAMBAHAN MAPPING GAMBAR LOKAL SESUAI INSTRUKSI
         const menuData = [
-            { id: 1, name: "Lumpia Kering Balado", price: 5000, img: "image_5b60e2.jpg", badge: "🔥 Paling Laris" },
-            { id: 2, name: "Tahu Bakso", price: 10000, img: "image_5b63a2.jpg", badge: "⭐ Favorit FKIP" },
-            { id: 3, name: "Cilok Pedas", price: 5000, img: "image_5b63a8.jpg", badge: "" },
-            { id: 4, name: "Lumpia Kering Asin", price: 5000, img: "image_5b60fd.jpg", badge: "" },
+            { id: 1, name: "Lumpia Kering Balado", price: 5000, img: "image_5b60e2.jpg.jfif", badge: "🔥 Paling Laris" },
+            { id: 2, name: "Tahu Bakso", price: 10000, img: "image_5b63a2.jpg.jfif", badge: "⭐ Favorit FKIP" },
+            { id: 3, name: "Cilok Pedas", price: 5000, img: "image_5b63a8.jpg.jfif", badge: "" },
+            { id: 4, name: "Lumpia Kering Asin", price: 5000, img: "image_5b60fd.jpg.jfif", badge: "" },
             { id: 5, name: "Bolu Coklat Lumer", price: 10000, img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300&q=80", badge: "✨ Premium" }
         ];
 
         let cart = {};
         let orderType = "";
         let selectedProvider = "";
+        let selectedMethod = ""; 
 
         function updateTotalStock() {
             let totalMaxStock = 0;
@@ -272,7 +333,6 @@
             document.getElementById(id).classList.remove('hidden');
             window.scrollTo(0,0);
 
-            // Tampilkan/Sembunyikan Sticky Button
             const stickyBtn = document.getElementById('sticky-order');
             if (id === 'page-home') {
                 stickyBtn.classList.remove('hidden');
@@ -281,17 +341,27 @@
             }
         }
 
+        // FUNGSI DIUBAH: Penambahan validasi waktu order yang ketat
         function startOrder(type) {
-            if (new Date().getHours() >= 24) {
-                alert("Maaf, PO sudah tutup hari ini 🙏");
-                return;
+            const currentHour = new Date().getHours();
+            
+            if (type === 'Ready Today') {
+                if (currentHour < 7 || currentHour >= 18) {
+                    alert("Maaf kak, order untuk hari ini hanya dibuka jam 07.00 - 18.00 🙏");
+                    return;
+                }
+            } else if (type === 'Pre-Order') {
+                if (currentHour < 7 || currentHour >= 20) {
+                    alert("Maaf kak, pre-order hanya dibuka jam 07.00 - 20.00 🙏");
+                    return;
+                }
             }
+
             orderType = type;
             renderMenu();
             showSection('page-menu');
         }
 
-        // FUNGSI DIUBAH AGAR BENTUK CARD (GAMBAR DI ATAS)
         function renderMenu() {
             const list = document.getElementById('menu-list');
             const header = document.getElementById('header-menu');
@@ -301,7 +371,17 @@
 
             list.innerHTML = menuData.map(item => {
                 const stokSisa = DATA_STOK[item.id] - (cart[item.id] || 0);
-                const isHabis = stokSisa <= 0 && (cart[item.id] || 0) === 0;
+                
+                let isHabis = false;
+                let sisaInfo = "";
+                
+                if (orderType === 'Pre-Order') {
+                    isHabis = false; 
+                    sisaInfo = `<div class="mt-2"></div>`; 
+                } else {
+                    isHabis = stokSisa <= 0 && (cart[item.id] || 0) === 0;
+                    sisaInfo = `<p class="text-[9px] font-bold ${stokSisa <= 0 ? 'text-red-500' : 'text-gray-400'} uppercase mt-1 mb-2">Sisa: ${stokSisa} Porsi</p>`;
+                }
                 
                 return `
                 <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 transition-transform hover:scale-[1.03] flex flex-col justify-between ${isHabis ? 'opacity-60 grayscale' : ''}">
@@ -313,11 +393,11 @@
                     <div class="flex-grow">
                         <h3 class="font-extrabold text-xs text-chocolate leading-tight">${item.name}</h3>
                         <p class="text-orange-600 font-bold text-[11px] mt-1">Rp${item.price.toLocaleString('id-ID')}</p>
-                        <p class="text-[9px] font-bold ${stokSisa <= 0 ? 'text-red-500' : 'text-gray-400'} uppercase mt-1 mb-2">Sisa: ${stokSisa} Porsi</p>
+                        ${sisaInfo}
                     </div>
 
                     <div>
-                        ${stokSisa <= 0 && (cart[item.id] || 0) === 0 ? 
+                        ${isHabis ? 
                             `<div class="text-center w-full bg-gray-100 text-red-500 font-bold text-xs py-2 rounded-xl">KOSONG KAK</div>` : 
                             `<div class="flex items-center justify-between bg-orange-50 rounded-xl p-1 shadow-inner border border-orange-100">
                                 <button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-white rounded-lg font-bold shadow-sm text-orange-600 btn-hover">-</button>
@@ -329,7 +409,6 @@
                 </div>`;
             }).join('');
             
-            // Tambahkan elemen kosong jika ganjil agar grid sejajar
             if (menuData.length % 2 !== 0) {
                 list.innerHTML += `<div class="hidden"></div>`;
             }
@@ -340,10 +419,14 @@
         function updateCart(id, change) {
             const stokSisa = DATA_STOK[id];
             const currentQty = cart[id] || 0;
-            if(change > 0 && currentQty >= stokSisa) {
-                alert("Maaf Kak, stok menu ini sudah habis!");
-                return;
+            
+            if (orderType !== 'Pre-Order') {
+                if(change > 0 && currentQty >= stokSisa) {
+                    alert("Maaf Kak, stok menu ini sudah habis!");
+                    return;
+                }
             }
+            
             cart[id] = currentQty + change;
             if (cart[id] <= 0) delete cart[id];
             updateCartUI();
@@ -402,14 +485,14 @@
         }
 
         function finalOrder(method) {
-            const { text, total } = getCartText();
-            const noWA = "6283144628727";
-            let msg = `Halo Food Kos! Saya mau order *${orderType}*\n\n` +
-                      `🛒 *PESANAN:*\n${text}\n` +
-                      `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
-                      `💳 *METODE:* ${method}\n\n` +
-                      `Nama:\nAlamat:`;
-            window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
+            selectedMethod = method;
+            showSection('page-form');
+            
+            if (orderType === 'Pre-Order') {
+                document.getElementById('jam-kirim-container').classList.remove('hidden');
+            } else {
+                document.getElementById('jam-kirim-container').classList.add('hidden');
+            }
         }
 
         function showTransferDetail(provider, target) {
@@ -420,13 +503,38 @@
         }
 
         function sendToWhatsAppWithPayment() {
+            finalOrder(selectedProvider);
+        }
+
+        function kirimOrderFinal() {
+            const nama = document.getElementById('input-nama').value.trim();
+            const alamat = document.getElementById('input-alamat').value.trim();
+            const jamKirim = document.getElementById('input-jam').value;
+
+            if (!nama) return alert("Mohon isi Nama Anda 🙏");
+            if (!alamat) return alert("Mohon isi Alamat pengiriman 🙏");
+            if (orderType === 'Pre-Order' && !jamKirim) return alert("Mohon pilih Jam Kirim 🙏");
+
             const { text, total } = getCartText();
             const noWA = "6283144628727";
-            let msg = `Halo Food Kos! Saya sudah transfer via *${selectedProvider}*\n\n` +
-                      `🛒 *DETAIL PESANAN:*\n${text}\n` +
-                      `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
-                      `📌 *JENIS:* ${orderType}\n\n` +
-                      `*(Bukti transfer kirim setelah ini)*`;
+            
+            let msg = `Halo Food Kos! Saya mau order\n\n` +
+                      `📦 *JENIS:* ${orderType}\n` +
+                      `👤 *Nama:* ${nama}\n` +
+                      `📍 *Alamat:* ${alamat}\n`;
+                      
+            if (orderType === 'Pre-Order') {
+                msg += `⏰ *Jam Kirim:* ${jamKirim}\n`;
+            }
+            
+            msg += `\n🛒 *PESANAN:*\n${text}\n` +
+                   `💰 *TOTAL:* Rp${total.toLocaleString('id-ID')}\n` +
+                   `💳 *METODE:* ${selectedMethod}`;
+                   
+            if (selectedMethod !== 'COD') {
+                msg += `\n\n*(Bukti transfer kirim setelah ini)*`;
+            }
+
             window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
