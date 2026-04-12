@@ -13,15 +13,15 @@
             background-color: #FFF9F2;
         }
 
-        /* 1. BACKGROUND DOODLE MAKANAN & GRADIENT SOFT */
+        /* 1. BACKGROUND DOODLE MAKANAN & GRADIENT SOFT (DIUPDATE: Opacity pattern dikurangi, overlay lebih tebal) */
         .bg-hero-doodle {
             background-color: #FFF8E1;
             background-image: 
-                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23D7A86E' stroke-width='1.5' fill='none' opacity='0.2'%3E%3C!-- Cupcake --%3E%3Cpath d='M 20 30 Q 25 20 30 30 L 32 40 L 18 40 Z' /%3E%3Cpath d='M 18 40 L 32 40 L 29 50 L 21 50 Z' /%3E%3Ccircle cx='25' cy='22' r='2' /%3E%3C!-- Croissant --%3E%3Cpath d='M 70 70 C 60 60 80 50 90 70 C 80 80 60 80 70 70 Z' /%3E%3C!-- Candy --%3E%3Ccircle cx='75' cy='25' r='5' /%3E%3Cpath d='M 70 25 L 65 20 L 65 30 Z' /%3E%3Cpath d='M 80 25 L 85 20 L 85 30 Z' /%3E%3C!-- Donut --%3E%3Ccircle cx='25' cy='80' r='8' /%3E%3Ccircle cx='25' cy='80' r='3' /%3E%3C/g%3E%3C/svg%3E"),
-                linear-gradient(135deg, rgba(255,248,225,0.95) 0%, rgba(255,213,79,0.85) 50%, rgba(215,168,110,0.8) 100%);
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23D7A86E' stroke-width='1.5' fill='none' opacity='0.08'%3E%3C!-- Cupcake --%3E%3Cpath d='M 20 30 Q 25 20 30 30 L 32 40 L 18 40 Z' /%3E%3Cpath d='M 18 40 L 32 40 L 29 50 L 21 50 Z' /%3E%3Ccircle cx='25' cy='22' r='2' /%3E%3C!-- Croissant --%3E%3Cpath d='M 70 70 C 60 60 80 50 90 70 C 80 80 60 80 70 70 Z' /%3E%3C!-- Candy --%3E%3Ccircle cx='75' cy='25' r='5' /%3E%3Cpath d='M 70 25 L 65 20 L 65 30 Z' /%3E%3Cpath d='M 80 25 L 85 20 L 85 30 Z' /%3E%3C!-- Donut --%3E%3Ccircle cx='25' cy='80' r='8' /%3E%3Ccircle cx='25' cy='80' r='3' /%3E%3C/g%3E%3C/svg%3E"),
+                linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,248,225,0.85) 50%, rgba(255,213,79,0.7) 100%);
         }
         
-        .glow-bg { box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.7); }
+        .glow-bg { box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.8); }
         .bg-gradient-fkf { background: linear-gradient(135deg, #FF7A00 0%, #FFD54F 100%); }
         .bg-gradient-po { background: linear-gradient(135deg, #4433ff 0%, #00d2ff 100%); }
         .rounded-custom { border-radius: 24px; }
@@ -29,20 +29,43 @@
         .btn-hover:active { transform: scale(0.95); }
         .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); }
         .text-chocolate { color: #5D4037; }
+
+        /* TAMBAHAN STYLE UNTUK FITUR BARU */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="text-gray-800 antialiased">
+<body class="text-gray-800 antialiased relative">
 
     <section id="page-home" class="pb-10">
         
         <div class="bg-hero-doodle pt-16 pb-24 px-6 text-center text-chocolate relative overflow-hidden shadow-lg glow-bg rounded-b-[40px]">
+            
+            <img src="https://images.unsplash.com/photo-1605851868153-3f11b43343bc?w=300&q=80" alt="Lumpia" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
+            
+            <img src="https://images.unsplash.com/photo-1596645396593-eb4174dcc1d7?w=300&q=80" alt="Cilok" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
+
             <div class="relative z-10">
-                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate">Food Kos</span>
-                <h1 class="text-4xl font-extrabold mb-2 leading-tight">Solusi Lapar<br>Anak FKIP</h1>
-                <p class="text-sm opacity-90 mb-2 italic">"Murah, Enak, Diantar ke Kos!" 🚚</p>
+                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate shadow-sm backdrop-blur-sm">Food Kos</span>
                 
-                <p class="text-sm font-bold text-red-600 mb-1">🔥 Sisa hari ini: <span id="total-stock">--</span> / 250 porsi</p>
-                <p class="text-xs mb-6 font-semibold">⭐ Sudah dipesan 120+ mahasiswa FKIP minggu ini</p>
+                <h1 class="text-4xl font-extrabold mb-2 leading-tight drop-shadow-sm">Solusi Lapar<br>Anak FKIP</h1>
+                
+                <div class="mb-4 mt-2">
+                    <span class="bg-white text-orange-600 font-extrabold text-xs px-4 py-2 rounded-full shadow-md border border-orange-100 inline-block animate-pulse">
+                        Cuma 5rb Udah Kenyang 😭
+                    </span>
+                </div>
+
+                <p class="text-sm opacity-90 mb-2 italic bg-white/40 inline-block px-3 py-1 rounded-full backdrop-blur-sm">"Murah, Enak, Diantar ke Kos!" 🚚</p>
+                
+                <p class="text-sm font-bold text-red-600 mb-1 mt-2 bg-white/60 inline-block px-3 py-1 rounded-xl backdrop-blur-sm shadow-sm">🔥 Sisa hari ini: <span id="total-stock">--</span> / 250 porsi</p>
+                <p class="text-xs mb-6 font-semibold text-chocolate/80">⭐ Sudah dipesan 120+ mahasiswa FKIP minggu ini</p>
                 
                 <div class="bg-orange-500 text-white rounded-[32px] px-8 py-5 mb-8 shadow-xl inline-block border-2 border-orange-400/50 w-full max-w-[280px]">
                     <p id="countdown-label" class="text-[11px] font-bold uppercase tracking-wider mb-1 opacity-90">PO Ditutup Jam 20.00 WIB</p>
@@ -56,7 +79,25 @@
             </div>
         </div>
 
-        <div class="px-6 -mt-8 mb-8 relative z-20">
+        <div class="px-6 -mt-5 mb-8 relative z-20 flex overflow-x-auto gap-3 pb-4 snap-x hide-scrollbar">
+            <div class="bg-white p-3 rounded-2xl shadow-md min-w-[220px] snap-center border border-gray-100 flex-shrink-0">
+                <p class="text-[10px] text-yellow-500 mb-1">⭐⭐⭐⭐⭐</p>
+                <p class="text-xs font-bold text-chocolate mb-1">"Enak banget sumpah 😭"</p>
+                <p class="text-[9px] text-gray-500 font-semibold">— Nisa, Mahasiswi FKIP</p>
+            </div>
+            <div class="bg-white p-3 rounded-2xl shadow-md min-w-[220px] snap-center border border-gray-100 flex-shrink-0">
+                <p class="text-[10px] text-yellow-500 mb-1">⭐⭐⭐⭐⭐</p>
+                <p class="text-xs font-bold text-chocolate mb-1">"Murah tapi kenyang, worth it!"</p>
+                <p class="text-[9px] text-gray-500 font-semibold">— Bima, Anak Untirta</p>
+            </div>
+            <div class="bg-white p-3 rounded-2xl shadow-md min-w-[220px] snap-center border border-gray-100 flex-shrink-0">
+                <p class="text-[10px] text-yellow-500 mb-1">⭐⭐⭐⭐⭐</p>
+                <p class="text-xs font-bold text-chocolate mb-1">"Repeat order terus tiap minggu 🔥"</p>
+                <p class="text-[9px] text-gray-500 font-semibold">— Dimas, Pelanggan Setia</p>
+            </div>
+        </div>
+
+        <div class="px-6 mb-8 relative z-20">
             <div class="glass p-5 rounded-custom shadow-xl border-t-4 border-yellow-500">
                 <h3 class="text-chocolate font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">🕒 Jadwal Operasi Food Kos</h3>
                 <div class="grid grid-cols-2 gap-4 text-[11px]">
@@ -78,15 +119,15 @@
         <div class="px-6 mb-8">
             <h3 class="text-chocolate font-extrabold text-sm mb-4 px-2">📝 Cara Order di Website:</h3>
             <div class="grid grid-cols-1 gap-3">
-                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 border border-white/80">
+                <div class="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">1</span>
                     <p class="text-xs font-semibold text-chocolate">Pilih menu favoritmu & klik tambah (+)</p>
                 </div>
-                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 border border-white/80">
+                <div class="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">2</span>
                     <p class="text-xs font-semibold text-chocolate">Masuk ke keranjang & pilih metode bayar</p>
                 </div>
-                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 border border-white/80">
+                <div class="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</span>
                     <p class="text-xs font-semibold text-chocolate">Selesaikan pembayaran & kirim bukti ke WA</p>
                 </div>
@@ -101,14 +142,14 @@
         </div>
     </section>
 
-    <section id="page-menu" class="hidden py-8 px-6 min-h-screen pb-32">
+    <section id="page-menu" class="hidden py-8 px-6 min-h-screen pb-32 bg-gray-50">
         <button onclick="showSection('page-home')" class="mb-4 text-orange-600 font-bold flex items-center gap-1"><span>←</span> Kembali</button>
         <div id="header-menu" class="p-6 rounded-2xl mb-8 text-white shadow-lg">
             <h2 id="menu-title" class="text-2xl font-extrabold"></h2>
             <p id="menu-desc" class="text-xs opacity-90"></p>
         </div>
 
-        <div class="space-y-4 max-w-md mx-auto" id="menu-list"></div>
+        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto" id="menu-list"></div>
 
         <div id="cart-bar" class="fixed bottom-6 left-6 right-6 glass p-4 rounded-custom shadow-2xl border border-orange-200 hidden z-50">
             <div class="flex justify-between items-center">
@@ -159,6 +200,10 @@
         <button onclick="sendToWhatsAppWithPayment()" class="w-full py-5 bg-green-500 text-white font-extrabold rounded-custom shadow-xl btn-hover">Kirim Bukti Bayar ke WA</button>
     </section>
 
+    <button id="sticky-order" onclick="startOrder('Ready Today')" class="fixed bottom-6 right-6 bg-[#FF7A00] text-white px-6 py-4 rounded-full shadow-[0_8px_20px_rgba(255,122,0,0.4)] z-[100] flex items-center justify-center btn-hover border-2 border-white">
+        <span class="font-extrabold text-sm">🔥 Order Sekarang</span>
+    </button>
+
     <script>
         function initCountdown() {
             const timerEl = document.getElementById('countdown-timer');
@@ -192,9 +237,6 @@
         }
         initCountdown();
 
-        /* ============================================================
-           BAGIAN SETTING MANUAL STOK HARI INI (DIUBAH KE 50 SEMUA)
-           ============================================================ */
         const DATA_STOK = {
             1: 50,  
             2: 50,   
@@ -203,12 +245,13 @@
             5: 50    
         };
 
+        // TAMBAHKAN URL GAMBAR DI DATA MENU
         const menuData = [
-            { id: 1, name: "Lumpia Kering Balado", price: 5000, icon: "🌯", badge: "🔥 Paling Laris" },
-            { id: 2, name: "Tahu Bakso", price: 10000, icon: "🍱", badge: "⭐ Favorit FKIP" },
-            { id: 3, name: "Cilok Pedas", price: 5000, icon: "🍡", badge: "" },
-            { id: 4, name: "Lumpia Kering Asin", price: 5000, icon: "🌯", badge: "" },
-            { id: 5, name: "Bolu Coklat Lumer", price: 10000, icon: "🍰", badge: "✨ Premium" }
+            { id: 1, name: "Lumpia Balado", price: 5000, img: "https://images.unsplash.com/photo-1605851868153-3f11b43343bc?w=300&q=80", badge: "🔥 Paling Laris" },
+            { id: 2, name: "Tahu Bakso", price: 10000, img: "https://images.unsplash.com/photo-1621686737525-2e6f4325a74e?w=300&q=80", badge: "⭐ Favorit FKIP" },
+            { id: 3, name: "Cilok Pedas", price: 5000, img: "https://images.unsplash.com/photo-1596645396593-eb4174dcc1d7?w=300&q=80", badge: "" },
+            { id: 4, name: "Lumpia Asin", price: 5000, img: "https://images.unsplash.com/photo-1599307767316-776affb34f66?w=300&q=80", badge: "" },
+            { id: 5, name: "Bolu Lumer", price: 10000, img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300&q=80", badge: "✨ Premium" }
         ];
 
         let cart = {};
@@ -229,6 +272,14 @@
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
             window.scrollTo(0,0);
+
+            // Tampilkan/Sembunyikan Sticky Button sesuai halaman
+            const stickyBtn = document.getElementById('sticky-order');
+            if (id === 'page-home') {
+                stickyBtn.classList.remove('hidden');
+            } else {
+                stickyBtn.classList.add('hidden');
+            }
         }
 
         function startOrder(type) {
@@ -241,37 +292,49 @@
             showSection('page-menu');
         }
 
+        // FUNGSI RENDER MENU DIUBAH MENJADI CARD DENGAN GAMBAR DI ATAS
         function renderMenu() {
             const list = document.getElementById('menu-list');
             const header = document.getElementById('header-menu');
-            header.className = (orderType === 'Pre-Order') ? "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-po" : "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-fkf";
+            header.className = (orderType === 'Pre-Order') ? "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-po col-span-2" : "p-6 rounded-2xl mb-8 text-white shadow-lg bg-gradient-fkf col-span-2";
             document.getElementById('menu-title').innerText = (orderType === 'Pre-Order') ? "Pre-Order Besok ⏳" : "Ready Hari Ini 🔥";
             document.getElementById('menu-desc').innerText = "Tersedia sesuai porsi yang ada:";
 
             list.innerHTML = menuData.map(item => {
                 const stokSisa = DATA_STOK[item.id] - (cart[item.id] || 0);
                 const isHabis = stokSisa <= 0 && (cart[item.id] || 0) === 0;
+                
                 return `
-                <div class="bg-white/80 p-4 rounded-custom shadow-md flex justify-between items-center border border-white/50 ${isHabis ? 'opacity-60 grayscale' : ''}">
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">${item.icon}</span>
-                        <div>
-                            ${item.badge ? `<span class="text-[8px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase">${item.badge}</span>` : ''}
-                            <h3 class="font-bold text-sm text-chocolate">${item.name}</h3>
-                            <p class="text-orange-600 font-bold text-xs">Rp${item.price.toLocaleString('id-ID')}</p>
-                            <p class="text-[10px] font-bold ${stokSisa <= 0 ? 'text-red-500' : 'text-gray-400'} uppercase">Sisa: ${stokSisa} Porsi</p>
-                        </div>
+                <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 transition-transform hover:scale-[1.03] flex flex-col justify-between ${isHabis ? 'opacity-60 grayscale' : ''}">
+                    <div class="w-full h-28 rounded-xl mb-3 overflow-hidden shadow-inner relative">
+                        ${item.badge ? `<span class="absolute top-2 left-2 text-[8px] bg-white text-orange-600 px-2 py-1 rounded-full font-extrabold uppercase shadow-sm z-10">${item.badge}</span>` : ''}
+                        <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
                     </div>
-                    ${stokSisa <= 0 && (cart[item.id] || 0) === 0 ? 
-                        `<span class="text-red-500 font-bold text-xs px-4">KOSONG KAK</span>` : 
-                        `<div class="flex items-center gap-2 bg-orange-50 rounded-xl p-1">
-                            <button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-white rounded-lg font-bold shadow-sm text-orange-600">-</button>
-                            <span class="font-bold min-w-[15px] text-center text-xs" id="qty-${item.id}">${cart[item.id] || 0}</span>
-                            <button onclick="updateCart(${item.id}, 1)" class="w-8 h-8 bg-orange-500 text-white rounded-lg font-bold shadow-sm">+</button>
-                        </div>`
-                    }
+                    
+                    <div class="flex-grow">
+                        <h3 class="font-extrabold text-xs text-chocolate leading-tight">${item.name}</h3>
+                        <p class="text-orange-600 font-bold text-[11px] mt-1">Rp${item.price.toLocaleString('id-ID')}</p>
+                        <p class="text-[9px] font-bold ${stokSisa <= 0 ? 'text-red-500' : 'text-gray-400'} uppercase mt-1 mb-2">Sisa: ${stokSisa} Porsi</p>
+                    </div>
+
+                    <div>
+                        ${stokSisa <= 0 && (cart[item.id] || 0) === 0 ? 
+                            `<div class="text-center w-full bg-gray-100 text-red-500 font-bold text-xs py-2 rounded-xl">KOSONG KAK</div>` : 
+                            `<div class="flex items-center justify-between bg-orange-50 rounded-xl p-1 shadow-inner border border-orange-100">
+                                <button onclick="updateCart(${item.id}, -1)" class="w-8 h-8 bg-white rounded-lg font-bold shadow-sm text-orange-600 btn-hover">-</button>
+                                <span class="font-extrabold min-w-[15px] text-center text-xs text-chocolate" id="qty-${item.id}">${cart[item.id] || 0}</span>
+                                <button onclick="updateCart(${item.id}, 1)" class="w-8 h-8 bg-orange-500 text-white rounded-lg font-bold shadow-sm btn-hover">+</button>
+                            </div>`
+                        }
+                    </div>
                 </div>`;
             }).join('');
+            
+            // Tambahkan elemen kosong jika jumlah menu ganjil agar grid rapi (khusus col-span-2)
+            if (menuData.length % 2 !== 0) {
+                list.innerHTML += `<div class="hidden"></div>`;
+            }
+
             updateCartUI();
         }
 
