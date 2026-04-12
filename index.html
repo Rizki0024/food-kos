@@ -13,7 +13,7 @@
             background-color: #FFF9F2;
         }
 
-        /* 1. BACKGROUND DOODLE MAKANAN & GRADIENT SOFT (DIUPDATE: Opacity pattern dikurangi, overlay lebih tebal) */
+        /* 1. BACKGROUND DOODLE MAKANAN & GRADIENT SOFT (DIUPDATE: Opacity dikurangi, overlay lebih bersih) */
         .bg-hero-doodle {
             background-color: #FFF8E1;
             background-image: 
@@ -47,13 +47,12 @@
         
         <div class="bg-hero-doodle pt-16 pb-24 px-6 text-center text-chocolate relative overflow-hidden shadow-lg glow-bg rounded-b-[40px]">
             
-            <img src="https://images.unsplash.com/photo-1605851868153-3f11b43343bc?w=300&q=80" alt="Lumpia" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
+            <img src="image_5b60e2.jpg" alt="Lumpia Balado" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
             
-            <img src="https://images.unsplash.com/photo-1596645396593-eb4174dcc1d7?w=300&q=80" alt="Cilok" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
+            <img src="image_5b63a2.jpg" alt="Tahu Bakso" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
 
             <div class="relative z-10">
-                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate shadow-sm backdrop-blur-sm">Food Kos</span>
-                
+                <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate backdrop-blur-sm">Food Kos</span>
                 <h1 class="text-4xl font-extrabold mb-2 leading-tight drop-shadow-sm">Solusi Lapar<br>Anak FKIP</h1>
                 
                 <div class="mb-4 mt-2">
@@ -119,15 +118,15 @@
         <div class="px-6 mb-8">
             <h3 class="text-chocolate font-extrabold text-sm mb-4 px-2">📝 Cara Order di Website:</h3>
             <div class="grid grid-cols-1 gap-3">
-                <div class="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
+                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">1</span>
                     <p class="text-xs font-semibold text-chocolate">Pilih menu favoritmu & klik tambah (+)</p>
                 </div>
-                <div class="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
+                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">2</span>
                     <p class="text-xs font-semibold text-chocolate">Masuk ke keranjang & pilih metode bayar</p>
                 </div>
-                <div class="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
+                <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</span>
                     <p class="text-xs font-semibold text-chocolate">Selesaikan pembayaran & kirim bukti ke WA</p>
                 </div>
@@ -245,13 +244,13 @@
             5: 50    
         };
 
-        // TAMBAHKAN URL GAMBAR DI DATA MENU
+        // TAMBAHAN MAPPING GAMBAR LOKAL SESUAI INSTRUKSI
         const menuData = [
-            { id: 1, name: "Lumpia Balado", price: 5000, img: "https://images.unsplash.com/photo-1605851868153-3f11b43343bc?w=300&q=80", badge: "🔥 Paling Laris" },
-            { id: 2, name: "Tahu Bakso", price: 10000, img: "https://images.unsplash.com/photo-1621686737525-2e6f4325a74e?w=300&q=80", badge: "⭐ Favorit FKIP" },
-            { id: 3, name: "Cilok Pedas", price: 5000, img: "https://images.unsplash.com/photo-1596645396593-eb4174dcc1d7?w=300&q=80", badge: "" },
-            { id: 4, name: "Lumpia Asin", price: 5000, img: "https://images.unsplash.com/photo-1599307767316-776affb34f66?w=300&q=80", badge: "" },
-            { id: 5, name: "Bolu Lumer", price: 10000, img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300&q=80", badge: "✨ Premium" }
+            { id: 1, name: "Lumpia Kering Balado", price: 5000, img: "image_5b60e2.jpg", badge: "🔥 Paling Laris" },
+            { id: 2, name: "Tahu Bakso", price: 10000, img: "image_5b63a2.jpg", badge: "⭐ Favorit FKIP" },
+            { id: 3, name: "Cilok Pedas", price: 5000, img: "image_5b63a8.jpg", badge: "" },
+            { id: 4, name: "Lumpia Kering Asin", price: 5000, img: "image_5b60fd.jpg", badge: "" },
+            { id: 5, name: "Bolu Coklat Lumer", price: 10000, img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300&q=80", badge: "✨ Premium" }
         ];
 
         let cart = {};
@@ -273,7 +272,7 @@
             document.getElementById(id).classList.remove('hidden');
             window.scrollTo(0,0);
 
-            // Tampilkan/Sembunyikan Sticky Button sesuai halaman
+            // Tampilkan/Sembunyikan Sticky Button
             const stickyBtn = document.getElementById('sticky-order');
             if (id === 'page-home') {
                 stickyBtn.classList.remove('hidden');
@@ -283,7 +282,7 @@
         }
 
         function startOrder(type) {
-            if (new Date().getHours() >= 24) {
+            if (new Date().getHours() >= 20) {
                 alert("Maaf, PO sudah tutup hari ini 🙏");
                 return;
             }
@@ -292,7 +291,7 @@
             showSection('page-menu');
         }
 
-        // FUNGSI RENDER MENU DIUBAH MENJADI CARD DENGAN GAMBAR DI ATAS
+        // FUNGSI DIUBAH AGAR BENTUK CARD (GAMBAR DI ATAS)
         function renderMenu() {
             const list = document.getElementById('menu-list');
             const header = document.getElementById('header-menu');
@@ -330,7 +329,7 @@
                 </div>`;
             }).join('');
             
-            // Tambahkan elemen kosong jika jumlah menu ganjil agar grid rapi (khusus col-span-2)
+            // Tambahkan elemen kosong jika ganjil agar grid sejajar
             if (menuData.length % 2 !== 0) {
                 list.innerHTML += `<div class="hidden"></div>`;
             }
