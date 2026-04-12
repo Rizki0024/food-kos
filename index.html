@@ -45,9 +45,9 @@
         
         <div class="bg-hero-doodle pt-16 pb-24 px-6 text-center text-chocolate relative overflow-hidden shadow-lg glow-bg rounded-b-[40px]">
             
-            <img src="image_5b60e2.jpg.jfif" alt="Lumpia Balado" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
+            <img src="image_5b60e2.jpg" alt="Lumpia Balado" class="absolute -left-6 top-24 w-28 h-28 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 rotate-12" style="animation-delay: 0s;">
             
-            <img src="image_5b63a2.jpg.jfif" alt="Tahu Bakso" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
+            <img src="image_5b63a2.jpg" alt="Tahu Bakso" class="absolute -right-6 bottom-32 w-24 h-24 object-cover rounded-[20px] shadow-lg border-2 border-white animate-float opacity-90 z-0 -rotate-12" style="animation-delay: 1.5s;">
 
             <div class="relative z-10">
                 <span class="bg-chocolate/10 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block text-chocolate backdrop-blur-sm">Food Kos</span>
@@ -311,10 +311,10 @@
         };
 
         const menuData = [
-            { id: 1, name: "Lumpia Kering Balado", price: 5000, img: "image_5b60e2.jpg.jfif", badge: "🔥 Paling Laris" },
-            { id: 2, name: "Tahu Bakso", price: 10000, img: "image_5b63a2.jpg.jfif", badge: "⭐ Favorit FKIP" },
-            { id: 3, name: "Cilok Pedas", price: 5000, img: "image_5b63a8.jpg.jfif", badge: "" },
-            { id: 4, name: "Lumpia Kering Asin", price: 5000, img: "image_5b60fd.jpg.jfif", badge: "" },
+            { id: 1, name: "Lumpia Kering Balado", price: 5000, img: "image_5b60e2.jpg", badge: "🔥 Paling Laris" },
+            { id: 2, name: "Tahu Bakso", price: 10000, img: "image_5b63a2.jpg", badge: "⭐ Favorit FKIP" },
+            { id: 3, name: "Cilok Pedas", price: 5000, img: "image_5b63a8.jpg", badge: "" },
+            { id: 4, name: "Lumpia Kering Asin", price: 5000, img: "image_5b60fd.jpg", badge: "" },
             { id: 5, name: "Bolu Coklat Lumer", price: 10000, img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300&q=80", badge: "✨ Premium" }
         ];
 
@@ -322,22 +322,17 @@
         let orderType = "";
         let selectedProvider = "";
         let selectedMethod = ""; 
-        
-        // VARIABEL BARU UNTUK WAKTU PO
         let selectedTimeSlot = "";
         let selectedSpecificTime = "";
 
-        // FUNGSI BARU UNTUK MEMILIH JAM
         function selectTimeSlot(slot, el) {
             selectedTimeSlot = slot;
             
-            // Reset warna semua tombol slot
             document.querySelectorAll('.slot-btn').forEach(btn => {
                 btn.classList.remove('border-orange-500', 'bg-[#FFF8E1]', 'text-orange-600');
                 btn.classList.add('border-gray-200', 'text-gray-600');
             });
             
-            // Highlight tombol yang dipilih
             el.classList.remove('border-gray-200', 'text-gray-600');
             el.classList.add('border-orange-500', 'bg-[#FFF8E1]', 'text-orange-600');
         }
@@ -495,12 +490,11 @@
             </div>`;
             document.getElementById('order-summary-box').innerHTML = summaryHTML;
             
-            // FUNGSI BARU: Menampilkan input Jam jika Pre-Order
             if (orderType === 'Pre-Order') {
                 document.getElementById('po-time-section').classList.remove('hidden');
             } else {
                 document.getElementById('po-time-section').classList.add('hidden');
-                selectedTimeSlot = ""; // Reset jika bukan PO
+                selectedTimeSlot = ""; 
             }
 
             showSection('page-payment-type');
@@ -517,13 +511,11 @@
         }
 
         function finalOrder(method) {
-            // VALIDASI WAJIB PO SEBELUM LANJUT
             if (orderType === 'Pre-Order') {
                 if (!selectedTimeSlot) {
                     alert("Pilih jam ambil dulu ya kak ⏰");
                     return;
                 }
-                // Ambil nilai jam spesifik
                 selectedSpecificTime = document.getElementById('input-specific-time').value;
             }
 
@@ -532,7 +524,6 @@
         }
 
         function showTransferDetail(provider, target) {
-            // Harus validasi jam juga sebelum masuk ke detail transfer bank (khusus PO)
             if (orderType === 'Pre-Order') {
                 if (!selectedTimeSlot) {
                     alert("Pilih jam ambil dulu ya kak ⏰");
@@ -567,7 +558,6 @@
                       `👤 *Nama:* ${nama}\n` +
                       `📍 *Alamat:* ${alamat}\n`;
                       
-            // FORMAT PESAN JAM AMBIL KHUSUS PO
             if (orderType === 'Pre-Order') {
                 msg += `⏰ *Jam Ambil:* ${selectedTimeSlot}\n`;
                 if (selectedSpecificTime) {
