@@ -28,7 +28,6 @@
         .btn-hover:active { transform: scale(0.95); }
         .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); }
         .text-chocolate { color: #5D4037; }
-        .error-ring { border-color: #ef4444 !important; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
 
         @keyframes float {
             0% { transform: translateY(0px); }
@@ -127,7 +126,7 @@
                 </div>
                 <div class="bg-white/60 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-gray-100">
                     <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</span>
-                    <p class="text-xs font-semibold text-chocolate">Selesaikan pembayaran & isi form pengiriman</p>
+                    <p class="text-xs font-semibold text-chocolate">Selesaikan form alamat & kirim ke WA</p>
                 </div>
             </div>
         </div>
@@ -222,12 +221,12 @@
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-xs mx-auto space-y-4">
             <div>
                 <label class="block text-xs font-bold text-chocolate mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
-                <input type="text" id="input-nama" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Masukkan nama kamu...">
+                <input type="text" id="input-nama" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Masukkan nama kamu..." oninput="removeError(this)">
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-chocolate mb-2">Alamat Detail <span class="text-red-500">*</span></label>
-                <textarea id="input-alamat" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Contoh: Nama Kos, Patokan, Lantai/Kamar..."></textarea>
+                <textarea id="input-alamat" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Contoh: Nama Kos, Patokan, Lantai/Kamar..." oninput="removeError(this)"></textarea>
                 <p class="text-[10px] text-gray-500 mt-1 italic leading-tight">Isi alamat sejelas mungkin agar kurir tidak nyasar</p>
             </div>
 
@@ -236,13 +235,9 @@
                     <label class="block text-xs font-bold text-chocolate">Jarak Pengiriman (km) <span class="text-red-500">*</span></label>
                     <button type="button" id="btn-gps" onclick="getLocation()" class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1.5 rounded-lg font-bold btn-hover flex items-center gap-1 shadow-sm">📍 Gunakan Lokasi Saya</button>
                 </div>
-                <input type="number" id="input-jarak" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Contoh: 3.5" min="0" step="0.1" oninput="updateOngkirDisplay()">
+                <input type="number" id="input-jarak" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Contoh: 3.5" min="0" step="0.1" oninput="updateOngkirDisplay(); removeError(this);">
                 <p id="ongkir-display" class="text-[11px] font-bold mt-1 hidden"></p>
                 <p id="gps-indicator" class="text-[10px] text-green-600 font-bold mt-1 hidden">✓ Jarak didapatkan otomatis dari GPS</p>
-            </div>
-
-            <div id="jam-kirim-container" class="hidden">
-                <select id="input-jam" class="hidden"></select>
             </div>
 
             <button id="btn-submit-order" onclick="kirimOrderFinal()" class="w-full bg-orange-500 text-white font-extrabold py-4 rounded-xl shadow-lg mt-4 transition-all duration-300 btn-hover focus:outline-none">Kirim Order ke WhatsApp 🚀</button>
@@ -260,12 +255,30 @@
         const CONFIG = {
             TOKO_LAT: -6.130694,
             TOKO_LON: 106.163861,
-            MAX_RADIUS: 7, // km
-            FREE_ONGKIR_LIMIT: 4, // km
+            MAX_RADIUS: 7, // km maksimal
+            FREE_ONGKIR_LIMIT: 4, // km bebas ongkir
             MID_ONGKIR_PRICE: 3000,
             WA_NUMBER: "6283144628727",
             GOOGLE_SHEET_URL: "https://script.google.com/macros/s/AKfycbw5F-TvUo7zrcDQtkIkppJ_7gVuHAcIQrcjX6LcOPF18vUfbWe2sin3rniym8qE9nhyBw/exec"
         };
+
+        // ==========================================
+        // FUNGSI UTILITIES & ERROR HANDLING
+        // ==========================================
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            if(el) {
+                el.classList.add('error-ring', 'border-red-500');
+                el.classList.remove('border-gray-200');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            alert(message);
+        }
+
+        function removeError(el) {
+            el.classList.remove('error-ring', 'border-red-500');
+            el.classList.add('border-gray-200');
+        }
 
         // ==========================================
         // FUNGSI LOKASI & HAVERSINE (GPS)
@@ -301,8 +314,8 @@
                         const distance = calculateDistance(userLat, userLon, CONFIG.TOKO_LAT, CONFIG.TOKO_LON);
                         
                         inputJarak.value = distance;
-                        inputJarak.readOnly = true; // Protect input manual
-                        inputJarak.classList.add('bg-gray-100', 'text-gray-500'); // UX Indicator readOnly
+                        inputJarak.readOnly = true; 
+                        inputJarak.classList.add('bg-gray-100', 'text-gray-500'); 
                         gpsIndicator.classList.remove('hidden');
                         
                         updateOngkirDisplay();
@@ -317,7 +330,7 @@
                         alert("Gagal mengambil lokasi. Silakan isi jarak secara manual 🙏");
                         btnGps.innerHTML = originalText;
                         btnGps.disabled = false;
-                        inputJarak.readOnly = false; // Fallback ke manual
+                        inputJarak.readOnly = false; 
                         inputJarak.classList.remove('bg-gray-100', 'text-gray-500');
                         gpsIndicator.classList.add('hidden');
                     },
@@ -330,7 +343,6 @@
                 inputJarak.readOnly = false;
             }
         }
-
 
         // ==========================================
         // FUNGSI ONGKIR & GOOGLE SHEET
@@ -348,7 +360,6 @@
             const display = document.getElementById('ongkir-display');
             const btnSubmit = document.getElementById('btn-submit-order');
             
-            // Allow user to edit if they start typing (if previously readonly from GPS)
             if(!inputEl.readOnly) {
                 document.getElementById('gps-indicator').classList.add('hidden');
             }
@@ -360,7 +371,6 @@
                 return;
             }
             
-            removeError(inputEl);
             const ongkir = hitungOngkir(jarak);
             
             if (ongkir === -1) {
@@ -396,7 +406,7 @@
         }
 
         // ==========================================
-        // LOCAL STORAGE & UX VALIDATION HELPERS
+        // AUTO LOAD LOCAL STORAGE
         // ==========================================
         function loadUserData() {
             const savedNama = localStorage.getItem('foodkos_nama');
@@ -413,23 +423,8 @@
 
         document.addEventListener("DOMContentLoaded", loadUserData);
 
-        function showError(elementId, message) {
-            const el = document.getElementById(elementId);
-            el.classList.add('error-ring');
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            alert(message);
-        }
-
-        function removeError(el) {
-            el.classList.remove('error-ring');
-        }
-
-        // Event listeners untuk hapus error ring saat diketik
-        document.getElementById('input-nama').addEventListener('input', function() { removeError(this); });
-        document.getElementById('input-alamat').addEventListener('input', function() { removeError(this); });
-
         // ==========================================
-        // FUNGSI UTAMA WEBSITE (LOGIKA UI & JAM)
+        // LOGIKA WAKTU & RENDER MENU
         // ==========================================
         function checkStoreHours() {
             const currentHour = new Date().getHours();
@@ -540,20 +535,19 @@
             }
         }
 
-        // VALIDASI KETAT BUTTON ORDER
+        // VALIDASI JAM ORDER
         function startOrder(type) {
             const currentHour = new Date().getHours();
             
-            // Testing Bypass bisa ubah 24 jadi jam normal 18/20
             if (type === 'Ready Today') {
-                if (currentHour < 7 || currentHour >= 24) { 
+                if (currentHour < 7 || currentHour >= 18) { 
                     alert("Maaf kak, order untuk hari ini hanya dibuka jam 07.00 - 18.00 🙏");
-                    return;
+                    return; // PASTI STOP DISINI JIKA DILUAR JAM
                 }
             } else if (type === 'Pre-Order') {
-                if (currentHour < 7 || currentHour >= 24) { 
+                if (currentHour < 7 || currentHour >= 20) { 
                     alert("Maaf kak, pre-order hanya dibuka jam 07.00 - 20.00 🙏");
-                    return;
+                    return; // PASTI STOP DISINI JIKA DILUAR JAM
                 }
             }
 
