@@ -28,6 +28,7 @@
         .btn-hover:active { transform: scale(0.95); }
         .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); }
         .text-chocolate { color: #5D4037; }
+        .error-ring { border-color: #ef4444 !important; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
 
         @keyframes float {
             0% { transform: translateY(0px); }
@@ -220,30 +221,31 @@
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-xs mx-auto space-y-4">
             <div>
-                <label class="block text-xs font-bold text-chocolate mb-2">Nama Lengkap</label>
-                <input type="text" id="input-nama" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500" placeholder="Masukkan nama kamu...">
+                <label class="block text-xs font-bold text-chocolate mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                <input type="text" id="input-nama" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Masukkan nama kamu...">
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-chocolate mb-2">Alamat / Nomor Kos</label>
-                <textarea id="input-alamat" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500" placeholder="Contoh: Kos Bu Ayu, Kamar No. 5, Samping Gerbang Untirta..."></textarea>
-                <p class="text-[10px] text-gray-500 mt-1 italic leading-tight">Isi alamat sejelas mungkin (contoh: Kos Bu Ayu, samping gerbang Untirta, kamar no 5)</p>
+                <label class="block text-xs font-bold text-chocolate mb-2">Alamat Detail <span class="text-red-500">*</span></label>
+                <textarea id="input-alamat" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Contoh: Nama Kos, Patokan, Lantai/Kamar..."></textarea>
+                <p class="text-[10px] text-gray-500 mt-1 italic leading-tight">Isi alamat sejelas mungkin agar kurir tidak nyasar</p>
             </div>
 
             <div>
                 <div class="flex justify-between items-center mb-2">
-                    <label class="block text-xs font-bold text-chocolate">Jarak Pengiriman (km)</label>
+                    <label class="block text-xs font-bold text-chocolate">Jarak Pengiriman (km) <span class="text-red-500">*</span></label>
                     <button type="button" id="btn-gps" onclick="getLocation()" class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1.5 rounded-lg font-bold btn-hover flex items-center gap-1 shadow-sm">📍 Gunakan Lokasi Saya</button>
                 </div>
-                <input type="number" id="input-jarak" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500" placeholder="Contoh: 3.5" min="0" step="0.1" oninput="updateOngkirDisplay()">
+                <input type="number" id="input-jarak" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" placeholder="Contoh: 3.5" min="0" step="0.1" oninput="updateOngkirDisplay()">
                 <p id="ongkir-display" class="text-[11px] font-bold mt-1 hidden"></p>
+                <p id="gps-indicator" class="text-[10px] text-green-600 font-bold mt-1 hidden">✓ Jarak didapatkan otomatis dari GPS</p>
             </div>
 
             <div id="jam-kirim-container" class="hidden">
                 <select id="input-jam" class="hidden"></select>
             </div>
 
-            <button id="btn-submit-order" onclick="kirimOrderFinal()" class="w-full bg-orange-500 text-white font-extrabold py-4 rounded-xl shadow-lg mt-4 transition-all duration-300 btn-hover">Kirim Order ke WhatsApp 🚀</button>
+            <button id="btn-submit-order" onclick="kirimOrderFinal()" class="w-full bg-orange-500 text-white font-extrabold py-4 rounded-xl shadow-lg mt-4 transition-all duration-300 btn-hover focus:outline-none">Kirim Order ke WhatsApp 🚀</button>
         </div>
     </section>
 
@@ -253,16 +255,23 @@
 
     <script>
         // ==========================================
-        // FITUR BARU 1: LOKASI & HAVERSINE (GPS)
+        // KONFIGURASI GLOBAL (REFACTOR)
         // ==========================================
-        
-        // Koordinat Toko (Sesuai instruksi: FKIP UNTIRTA)
-        const TOKO_LAT = -6.130694;
-        const TOKO_LON = 106.163861;
+        const CONFIG = {
+            TOKO_LAT: -6.130694,
+            TOKO_LON: 106.163861,
+            MAX_RADIUS: 7, // km
+            FREE_ONGKIR_LIMIT: 4, // km
+            MID_ONGKIR_PRICE: 3000,
+            WA_NUMBER: "6283144628727",
+            GOOGLE_SHEET_URL: "https://script.google.com/macros/s/AKfycbw5F-TvUo7zrcDQtkIkppJ_7gVuHAcIQrcjX6LcOPF18vUfbWe2sin3rniym8qE9nhyBw/exec"
+        };
 
-        // Fungsi Hitung Jarak Otomatis (Haversine Formula)
+        // ==========================================
+        // FUNGSI LOKASI & HAVERSINE (GPS)
+        // ==========================================
         function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radius bumi dalam kilometer
+            const R = 6371; 
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = 
@@ -270,17 +279,18 @@
                 Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             const d = R * c; 
-            return d.toFixed(1); // Output dibulatkan 1 angka di belakang koma (misal: 2.5)
+            return d.toFixed(1); 
         }
 
-        // Fungsi Memanggil API Geolocation dari HP/Browser User
         function getLocation() {
             const btnGps = document.getElementById('btn-gps');
+            const inputJarak = document.getElementById('input-jarak');
+            const gpsIndicator = document.getElementById('gps-indicator');
             const originalText = btnGps.innerHTML;
             
-            // Loading State UI Button GPS
             btnGps.innerHTML = "⏳ Mencari...";
             btnGps.disabled = true;
+            removeError(inputJarak);
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -288,57 +298,61 @@
                         const userLat = position.coords.latitude;
                         const userLon = position.coords.longitude;
                         
-                        // Hitung jarak
-                        const distance = calculateDistance(userLat, userLon, TOKO_LAT, TOKO_LON);
+                        const distance = calculateDistance(userLat, userLon, CONFIG.TOKO_LAT, CONFIG.TOKO_LON);
                         
-                        // Auto-fill ke form input jarak
-                        document.getElementById('input-jarak').value = distance;
-                        updateOngkirDisplay(); // Update nominal ongkir
+                        inputJarak.value = distance;
+                        inputJarak.readOnly = true; // Protect input manual
+                        inputJarak.classList.add('bg-gray-100', 'text-gray-500'); // UX Indicator readOnly
+                        gpsIndicator.classList.remove('hidden');
                         
-                        // Sukses State UI
+                        updateOngkirDisplay();
+                        
                         btnGps.innerHTML = "✅ Lokasi Ditemukan";
                         setTimeout(() => {
-                            btnGps.innerHTML = originalText;
+                            btnGps.innerHTML = "📍 Perbarui Lokasi";
                             btnGps.disabled = false;
                         }, 2000);
                     },
                     (error) => {
-                        // Fallback jika ditolak / GPS mati
-                        alert("Gagal mengambil lokasi (Mohon izinkan akses lokasi / nyalakan GPS). Silakan isi jarak secara manual 🙏");
+                        alert("Gagal mengambil lokasi. Silakan isi jarak secara manual 🙏");
                         btnGps.innerHTML = originalText;
                         btnGps.disabled = false;
+                        inputJarak.readOnly = false; // Fallback ke manual
+                        inputJarak.classList.remove('bg-gray-100', 'text-gray-500');
+                        gpsIndicator.classList.add('hidden');
                     },
-                    { enableHighAccuracy: true } // Minta akurasi tertinggi ke satelit
+                    { enableHighAccuracy: true, timeout: 10000 }
                 );
             } else {
-                alert("Browser Anda tidak mendukung fitur lokasi. Silakan ketik jarak manual.");
+                alert("Browser tidak mendukung fitur lokasi. Silakan ketik manual.");
                 btnGps.innerHTML = originalText;
                 btnGps.disabled = false;
+                inputJarak.readOnly = false;
             }
         }
 
 
         // ==========================================
-        // FITUR BARU 2: ONGKIR OTOMATIS & GOOGLE SHEET
+        // FUNGSI ONGKIR & GOOGLE SHEET
         // ==========================================
-        
-        // Logika Ongkir Baru:
-        // <= 4 km = Rp0
-        // >4 - 7 km = Rp3000
-        // > 7 km = Error (-1)
         function hitungOngkir(jarak) {
-            if (!jarak || jarak <= 4) return 0;
-            if (jarak > 4 && jarak <= 7) return 3000;
-            return -1; // Flag invalid / tidak melayani > 7km
+            if (!jarak || jarak <= CONFIG.FREE_ONGKIR_LIMIT) return 0;
+            if (jarak > CONFIG.FREE_ONGKIR_LIMIT && jarak <= CONFIG.MAX_RADIUS) return CONFIG.MID_ONGKIR_PRICE;
+            return -1; // Flag invalid > Max Radius
         }
 
         function updateOngkirDisplay() {
-            const jarakInput = document.getElementById('input-jarak').value;
+            const inputEl = document.getElementById('input-jarak');
+            const jarakInput = inputEl.value;
             const jarak = parseFloat(jarakInput);
             const display = document.getElementById('ongkir-display');
             const btnSubmit = document.getElementById('btn-submit-order');
             
-            // Reset jika input kosong
+            // Allow user to edit if they start typing (if previously readonly from GPS)
+            if(!inputEl.readOnly) {
+                document.getElementById('gps-indicator').classList.add('hidden');
+            }
+
             if (isNaN(jarak) || jarak < 0 || jarakInput === "") {
                 display.classList.add('hidden');
                 btnSubmit.disabled = false;
@@ -346,66 +360,77 @@
                 return;
             }
             
+            removeError(inputEl);
             const ongkir = hitungOngkir(jarak);
             
-            // Validasi > 7 km UI Handling
             if (ongkir === -1) {
-                display.innerText = "❌ Maaf, saat ini kami hanya melayani radius 0 - 7 km dari FKIP UNTIRTA.";
+                display.innerText = `❌ Maaf, radius pengiriman maksimal adalah ${CONFIG.MAX_RADIUS} km dari FKIP UNTIRTA.`;
                 display.classList.remove('text-orange-600');
                 display.classList.add('text-red-600');
                 display.classList.remove('hidden');
-                
-                // Disable tombol kirim
                 btnSubmit.disabled = true;
                 btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
-                display.innerText = ongkir === 0 ? "Ongkir: GRATIS (≤ 4km)" : `Ongkir: Rp${ongkir.toLocaleString('id-ID')}`;
+                display.innerText = ongkir === 0 ? `Ongkir: GRATIS (≤ ${CONFIG.FREE_ONGKIR_LIMIT}km)` : `Ongkir: Rp${ongkir.toLocaleString('id-ID')}`;
                 display.classList.add('text-orange-600');
                 display.classList.remove('text-red-600');
                 display.classList.remove('hidden');
-                
-                // Enable tombol kirim
                 btnSubmit.disabled = false;
                 btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
 
-        // Endpoint Google App Script
-        const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw5F-TvUo7zrcDQtkIkppJ_7gVuHAcIQrcjX6LcOPF18vUfbWe2sin3rniym8qE9nhyBw/exec";
-
         async function sendToGoogleSheet(data) {
             try {
-                await fetch(GOOGLE_SHEET_URL, {
+                const response = await fetch(CONFIG.GOOGLE_SHEET_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                return true;
+                return true; 
             } catch (error) {
                 console.error('Error pengiriman ke Google Sheet:', error);
-                return false;
+                return false; 
             }
         }
 
         // ==========================================
-        // FITUR BARU 3: LOCAL STORAGE (AUTO LOGIN SEDERHANA)
+        // LOCAL STORAGE & UX VALIDATION HELPERS
         // ==========================================
         function loadUserData() {
             const savedNama = localStorage.getItem('foodkos_nama');
             const savedAlamat = localStorage.getItem('foodkos_alamat');
+            const savedJarak = localStorage.getItem('foodkos_jarak');
+            
             if (savedNama) document.getElementById('input-nama').value = savedNama;
             if (savedAlamat) document.getElementById('input-alamat').value = savedAlamat;
+            if (savedJarak) {
+                document.getElementById('input-jarak').value = savedJarak;
+                updateOngkirDisplay();
+            }
         }
 
-        // Jalankan saat halaman pertama kali termuat
         document.addEventListener("DOMContentLoaded", loadUserData);
 
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.classList.add('error-ring');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            alert(message);
+        }
+
+        function removeError(el) {
+            el.classList.remove('error-ring');
+        }
+
+        // Event listeners untuk hapus error ring saat diketik
+        document.getElementById('input-nama').addEventListener('input', function() { removeError(this); });
+        document.getElementById('input-alamat').addEventListener('input', function() { removeError(this); });
 
         // ==========================================
-        // FUNGSI UTAMA WEBSITE (LOGIKA UI)
+        // FUNGSI UTAMA WEBSITE (LOGIKA UI & JAM)
         // ==========================================
-
         function checkStoreHours() {
             const currentHour = new Date().getHours();
             
@@ -458,7 +483,6 @@
                         String(m).padStart(2, '0') + ":" + 
                         String(s).padStart(2, '0');
                 }
-                
                 checkStoreHours();
             }
             update();
@@ -466,13 +490,7 @@
         }
         initCountdown();
 
-        const DATA_STOK = {
-            1: 50,  
-            2: 50,   
-            3: 50,  
-            4: 50,   
-            5: 50    
-        };
+        const DATA_STOK = { 1: 50, 2: 50, 3: 50, 4: 50, 5: 50 };
 
         const menuData = [
             { id: 1, name: "Lumpia Kering Balado", price: 5000, img: "image_5b60e2.jpg", badge: "🔥 Paling Laris" },
@@ -491,12 +509,10 @@
 
         function selectTimeSlot(slot, el) {
             selectedTimeSlot = slot;
-            
             document.querySelectorAll('.slot-btn').forEach(btn => {
                 btn.classList.remove('border-orange-500', 'bg-[#FFF8E1]', 'text-orange-600');
                 btn.classList.add('border-gray-200', 'text-gray-600');
             });
-            
             el.classList.remove('border-gray-200', 'text-gray-600');
             el.classList.add('border-orange-500', 'bg-[#FFF8E1]', 'text-orange-600');
         }
@@ -524,10 +540,11 @@
             }
         }
 
+        // VALIDASI KETAT BUTTON ORDER
         function startOrder(type) {
             const currentHour = new Date().getHours();
             
-            // Testing bypass bisa dihapus angka 24 jadi 18/20 realnya
+            // Testing Bypass bisa ubah 24 jadi jam normal 18/20
             if (type === 'Ready Today') {
                 if (currentHour < 7 || currentHour >= 24) { 
                     alert("Maaf kak, order untuk hari ini hanya dibuka jam 07.00 - 18.00 🙏");
@@ -554,7 +571,6 @@
 
             list.innerHTML = menuData.map(item => {
                 const stokSisa = DATA_STOK[item.id] - (cart[item.id] || 0);
-                
                 let isHabis = false;
                 let sisaInfo = "";
                 
@@ -592,10 +608,7 @@
                 </div>`;
             }).join('');
             
-            if (menuData.length % 2 !== 0) {
-                list.innerHTML += `<div class="hidden"></div>`;
-            }
-
+            if (menuData.length % 2 !== 0) { list.innerHTML += `<div class="hidden"></div>`; }
             updateCartUI();
         }
 
@@ -637,4 +650,170 @@
                 const item = menuData.find(m => m.id == id);
                 total += item.price * cart[id];
             }
-            const isMember = document.getElementById('member-check') && document.getElementById('member-check
+            const isMember = document.getElementById('member-check') && document.getElementById('member-check').checked;
+            if (isMember && total < 10000) {
+                alert("Minimal order Rp10.000 untuk member ya kak 😊");
+                return;
+            }
+            let summaryHTML = `<p class="font-bold mb-3 border-b pb-2 text-chocolate italic">Pesanan Kamu:</p>`;
+            for (let id in cart) {
+                const item = menuData.find(m => m.id == id);
+                summaryHTML += `<div class="flex justify-between mb-1 text-xs">
+                    <span>${item.name} (x${cart[id]})</span>
+                    <span>Rp${(item.price * cart[id]).toLocaleString('id-ID')}</span>
+                </div>`;
+            }
+            summaryHTML += `<div class="flex justify-between mt-3 pt-3 border-t-2 border-dashed font-extrabold text-orange-600 text-base">
+                <span>TOTAL</span><span>Rp${total.toLocaleString('id-ID')}</span>
+            </div>`;
+            document.getElementById('order-summary-box').innerHTML = summaryHTML;
+            
+            if (orderType === 'Pre-Order') {
+                document.getElementById('po-time-section').classList.remove('hidden');
+            } else {
+                document.getElementById('po-time-section').classList.add('hidden');
+                selectedTimeSlot = ""; 
+            }
+
+            showSection('page-payment-type');
+        }
+
+        function getCartText() {
+            let text = ""; let total = 0;
+            for (let id in cart) {
+                const item = menuData.find(m => m.id == id);
+                text += `- ${item.name} (x${cart[id]})\n`;
+                total += item.price * cart[id];
+            }
+            return { text, total };
+        }
+
+        function finalOrder(method) {
+            if (orderType === 'Pre-Order') {
+                if (!selectedTimeSlot) {
+                    alert("Pilih jam ambil dulu ya kak ⏰");
+                    return;
+                }
+                selectedSpecificTime = document.getElementById('input-specific-time').value;
+            }
+            selectedMethod = method;
+            showSection('page-form');
+        }
+
+        function showTransferDetail(provider, target) {
+            if (orderType === 'Pre-Order') {
+                if (!selectedTimeSlot) {
+                    alert("Pilih jam ambil dulu ya kak ⏰");
+                    return;
+                }
+                selectedSpecificTime = document.getElementById('input-specific-time').value;
+            }
+            selectedProvider = provider;
+            document.getElementById('final-bank-name').innerText = "Bayar via " + provider;
+            document.getElementById('final-target').innerText = target;
+            showSection('page-transfer-final');
+        }
+
+        function sendToWhatsAppWithPayment() {
+            selectedMethod = selectedProvider;
+            showSection('page-form');
+        }
+
+        // ==========================================
+        // EKSEKUSI FINAL DENGAN DOUBLE VALIDASI & CONFIRM DIALOG
+        // ==========================================
+        async function kirimOrderFinal() {
+            const btnSubmit = document.getElementById('btn-submit-order');
+            const nama = document.getElementById('input-nama').value.trim();
+            const alamat = document.getElementById('input-alamat').value.trim();
+            const jarakInput = document.getElementById('input-jarak').value;
+            const jarak = parseFloat(jarakInput);
+
+            // Validasi Double (UI/UX)
+            if (!nama) return showError('input-nama', "Mohon isi Nama Lengkap Anda 🙏");
+            if (!alamat) return showError('input-alamat', "Mohon isi Alamat pengiriman dengan detail 🙏");
+            
+            if (isNaN(jarak) || jarak < 0 || jarakInput === "") {
+                return showError('input-jarak', "Mohon isi Jarak Pengiriman berupa angka valid (misal: 1.5) 🙏");
+            }
+            
+            // Validasi Logic Maksimal Jarak
+            if (jarak > CONFIG.MAX_RADIUS) {
+                showError('input-jarak', `Maaf, radius pengiriman maksimal adalah ${CONFIG.MAX_RADIUS} km dari FKIP.`);
+                return;
+            }
+
+            // Confirm Dialog sebelum submit
+            const confirmOrder = confirm("Pastikan pesanan dan alamat kamu sudah benar ya kak. Lanjut order?");
+            if (!confirmOrder) return; // Batalkan jika user klik Cancel
+
+            // Simpan Ke Local Storage
+            localStorage.setItem('foodkos_nama', nama);
+            localStorage.setItem('foodkos_alamat', alamat);
+            localStorage.setItem('foodkos_jarak', jarakInput);
+
+            const ongkir = hitungOngkir(jarak);
+            const { text, total } = getCartText();
+            const grandTotal = total + ongkir;
+
+            const orderData = {
+                nama: nama,
+                alamat: alamat,
+                jenis: orderType,
+                menu: text.trim(), 
+                total: grandTotal,
+                metode: selectedMethod,
+                jamAmbil: orderType === 'Pre-Order' ? selectedTimeSlot : '-',
+                jamDetail: (orderType === 'Pre-Order' && selectedSpecificTime) ? selectedSpecificTime : '-',
+                ongkir: ongkir,
+                jarak: jarak
+            };
+
+            // Loading UX
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = "Pesanan sedang diproses... ⏳";
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Kirim ke Google Sheet
+            const isSuccess = await sendToGoogleSheet(orderData);
+            
+            if (!isSuccess) {
+                alert("Catatan: Terjadi kendala mencatat data ke sistem, tapi pesanan tetap akan dilanjutkan ke WhatsApp.");
+            } else {
+                alert("Pesanan berhasil dibuat! Mengalihkan ke WhatsApp...");
+            }
+
+            // Restore UX Button
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            // Format Pesan WA
+            let msg = `Halo Food Kos! Saya mau order\n\n` +
+                      `📦 *JENIS:* ${orderType}\n` +
+                      `👤 *Nama:* ${nama}\n` +
+                      `📍 *Alamat:* ${alamat}\n` +
+                      `📍 *Jarak:* ${jarak} km\n` +
+                      `🚚 *Ongkir:* Rp${ongkir.toLocaleString('id-ID')}\n`;
+                      
+            if (orderType === 'Pre-Order') {
+                msg += `\n⏰ *Jam Ambil:* ${selectedTimeSlot}\n`;
+                if (selectedSpecificTime) {
+                    msg += `🕒 *Jam Detail:* ${selectedSpecificTime}\n`;
+                }
+            }
+            
+            msg += `\n🛒 *PESANAN:*\n${text}\n` +
+                   `💰 *TOTAL:* Rp${grandTotal.toLocaleString('id-ID')}\n` +
+                   `💳 *METODE:* ${selectedMethod}`;
+                   
+            if (selectedMethod !== 'COD') {
+                msg += `\n\n*(Bukti transfer kirim setelah ini)*`;
+            }
+
+            window.open(`https://wa.me/${CONFIG.WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
